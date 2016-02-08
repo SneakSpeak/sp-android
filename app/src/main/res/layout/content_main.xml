@@ -26,13 +26,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Osoite"/>
+            android:text="Osoite" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/address"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:text="sneakspeak.dy.fi"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/port"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:text="3000"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,7 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/route"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:text="/api/user/register"/>
 
     </GridLayout>
 

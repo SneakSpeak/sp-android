@@ -16,12 +16,13 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import org.jetbrains.anko.async
 import org.jetbrains.anko.toast
+import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity(),
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    val httpClient = OkHttpClient()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,22 +47,12 @@ class MainActivity : AppCompatActivity(),
 
         toast(url)
 
-        val MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
-
-
-        var request = Request.Builder()
-                .url(url)
-                .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, "testing"))
-                .build()
+        val json = JSONObject()
+        json.put("username", "meitsi")
+        json.put("device", "supakey")
 
         async() {
-            try {
-                val response = httpClient.newCall(request).execute()
-                toast(response.toString())
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
+            HttpManager.post(url, json)
         }
 
 
