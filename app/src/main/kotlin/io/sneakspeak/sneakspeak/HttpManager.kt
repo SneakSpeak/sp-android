@@ -12,6 +12,8 @@ object HttpManager {
 
     fun post(url: String, json: JSONObject) {
 
+        log(json.toString())
+
         val body = RequestBody.create(JSON, json.toString())
 
         var request = Request.Builder()
@@ -22,6 +24,7 @@ object HttpManager {
         try {
             val response = httpClient.newCall(request).execute()
             log(response.toString())
+            response.body().close()
 
         } catch (e: Exception) {
             e.printStackTrace()

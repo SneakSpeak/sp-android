@@ -1,5 +1,6 @@
 package io.sneakspeak.sneakspeak
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -15,8 +16,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.jetbrains.anko.async
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.json.JSONObject
+import kotlin.jvm.*
 
 
 class MainActivity : AppCompatActivity(),
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        toolbar.subtitle = "Shhh"
         setSupportActionBar(toolbar)
 
         val toggle = ActionBarDrawerToggle(
@@ -39,7 +43,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onClick(p0: View?) {
-        val address = address.text.toString()
+        /*val address = address.text.toString()
         val port = Integer.parseInt(port.text.toString())
         val route = route.text.toString()
 
@@ -50,12 +54,14 @@ class MainActivity : AppCompatActivity(),
         val json = JSONObject()
         json.put("username", "meitsi")
         json.put("device", "supakey")
+        json.put("password", "blob")
 
         async() {
             HttpManager.post(url, json)
-        }
+        }*/
 
-
+        // val service = Intent(this, javaClass<SneakInstanceIDService>())
+        startService(intentFor<SneakInstanceIDService>())
     }
 
     override fun onBackPressed() {
