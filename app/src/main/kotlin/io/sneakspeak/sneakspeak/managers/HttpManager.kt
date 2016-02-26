@@ -1,5 +1,6 @@
-package io.sneakspeak.sneakspeak
+package io.sneakspeak.sneakspeak.managers
 
+import io.sneakspeak.sneakspeak.log
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -9,6 +10,8 @@ import org.json.JSONObject
 object HttpManager {
     val httpClient = OkHttpClient()
     val JSON = MediaType.parse("application/json; charset=utf-8")
+
+
 
     fun post(url: String, json: JSONObject) {
 
