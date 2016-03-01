@@ -7,20 +7,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import io.sneakspeak.sneakspeak.MainActivity
-import io.sneakspeak.sneakspeak.RegistrationIntentService
+import io.sneakspeak.sneakspeak.containsText
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import org.jetbrains.anko.*
 
 class LoginFragment : Fragment() {
-    companion object {
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
-            //= inflater?.inflate(R.layout.content_main, container, false)
             = LoginUI<Fragment>().createView(AnkoContext.create(activity, this))
 
-    class LoginUI<T> : AnkoComponent<T> {
+    /**
+     * Create Fragment UI using Anko DSL instead of XML.
+     */
+    private class LoginUI<T> : AnkoComponent<T> {
         lateinit var address: TextView
         lateinit var port: TextView
         lateinit var username: TextView
@@ -52,11 +51,11 @@ class LoginFragment : Fragment() {
 
                 button("Register / Login") {
                     onClick {
-                        if (address.text.toString().replace("\\s+", "").length == 0) {
+                        if (!address.containsText()) {
                             toast("Address can't be empty")
-                        } else if (port.text.toString().replace("\\s+", "").length == 0) {
+                        } else if (!port.containsText()) {
                             toast("Port can't be empty")
-                        } else if (username.text.toString().replace("\\s+", "").length == 0) {
+                        } else if (!username.containsText()) {
                             toast("Username can't be empty")
                         } else {
 

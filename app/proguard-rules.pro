@@ -19,3 +19,5 @@
 -dontwarn org.jetbrains.anko.**
 -dontwarn java.nio.file.**
 -dontwarn org.codehaus.**
+
+-keepnames public class io.sneakspeak.**

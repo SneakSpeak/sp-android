@@ -12,21 +12,22 @@ object HttpManager {
     val JSON = MediaType.parse("application/json; charset=utf-8")
 
 
-
     fun post(url: String, json: JSONObject) {
 
-        log(json.toString())
-
-        val body = RequestBody.create(JSON, json.toString())
-
-        var request = Request.Builder()
-                .url(url)
-                .post(body)
-                .build()
-
         try {
+            log(json.toString())
+
+            val body = RequestBody.create(JSON, json.toString())
+
+            var request = Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build()
+
+
             val response = httpClient.newCall(request).execute()
             log(response.toString())
+            log(response.body().string())
             response.body().close()
 
         } catch (e: Exception) {

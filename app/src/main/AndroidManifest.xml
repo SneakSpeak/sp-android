@@ -13,9 +13,6 @@
     <!--<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />-->
     <!--<uses-permission android:name="com.google.android.c2dm.permission.SEND"/>-->
 
-
-
-
     <application
         android:name=".SneakSpeak"
         android:allowBackup="true"
@@ -46,7 +43,7 @@
         </receiver>
 
         <service
-            android:name=".SneakGcmListenerService"
+            android:name=".gcm.SneakGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -55,7 +52,7 @@
         </service>
 
         <service
-            android:name=".RegistrationIntentService"
+            android:name=".gcm.RegistrationIntentService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>

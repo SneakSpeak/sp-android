@@ -1,4 +1,4 @@
-package io.sneakspeak.sneakspeak
+package io.sneakspeak.sneakspeak.gcm
 
 import android.app.IntentService
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.gcm.GoogleCloudMessaging
 import com.google.android.gms.iid.InstanceID
+import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.managers.HttpManager
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import org.jetbrains.anko.async
@@ -32,20 +33,19 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         val json = JSONObject()
 
         json.put("username", username)
-        json.put("password", "lolJoqPassu")
         json.put("token", token)
 
         Log.d(TAG, "Sending registration.")
 
         HttpManager.post(regUrl, json)
 
-        val data = Bundle()
-
-        val gcm = GoogleCloudMessaging.getInstance(this)
-        val senderId = getString(R.string.gcm_defaultSenderId)
-        data.putString("my_message", "Hello World")
-        data.putString("my_action","SAY_HELLO")
-        val id = Integer.toString(2);
-        gcm.send(senderId + "@gcm.googleapis.com", id, data);
+//        val data = Bundle()
+//
+//        val gcm = GoogleCloudMessaging.getInstance(this)
+//        val senderId = getString(R.string.gcm_defaultSenderId)
+//        data.putString("my_message", "Hello World")
+//        data.putString("my_action","SAY_HELLO")
+//        val id = Integer.toString(2);
+//        gcm.send(senderId + "@gcm.googleapis.com", id, data);
     }
 }

@@ -1,4 +1,4 @@
-package io.sneakspeak.sneakspeak
+package io.sneakspeak.sneakspeak.gcm
 
 
 class SneakInstanceIDListenerService {

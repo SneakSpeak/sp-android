@@ -1,4 +1,4 @@
-package io.sneakspeak.sneakspeak
+package io.sneakspeak.sneakspeak.gcm
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.support.v7.app.NotificationCompat
 import android.util.Log
 import com.google.android.gms.gcm.GcmListenerService
+import io.sneakspeak.sneakspeak.MainActivity
+import io.sneakspeak.sneakspeak.R
 
 
 class SneakGcmListenerService : GcmListenerService() {
