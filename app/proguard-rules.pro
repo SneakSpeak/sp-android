@@ -15,4 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--dontwarn kotlin.**
+-dontwarn org.jetbrains.kotlin.**
+-dontwarn org.jetbrains.anko.**
+-dontwarn java.nio.file.**
+-dontwarn org.codehaus.**

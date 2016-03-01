@@ -37,6 +37,7 @@ class SneakGcmListenerService : GcmListenerService() {
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notificationBuilder = NotificationCompat.Builder(this)
                     .setContentTitle("GCM Message")
+                    .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentText(message)
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
