@@ -2,8 +2,12 @@ package io.sneakspeak.sneakspeak
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.os.ResultReceiver
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import io.sneakspeak.sneakspeak.R.layout.activity_main
 import io.sneakspeak.sneakspeak.fragments.LoginFragment
 import io.sneakspeak.sneakspeak.gcm.RegistrationIntentService
@@ -11,29 +15,45 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
+
+    override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
+        Log.d(TAG, "Received: $resultData")
+
+        if (currentFragment is LoginFragment)
+            (currentFragment as LoginFragment).sendResult("jou")
+    }
 
     companion object {
 
+        val TAG = "MainActivity"
+
         lateinit var ctx: Context;
         lateinit var fm: FragmentManager
+        lateinit var currentFragment: Fragment
 
-        fun switchScreen() {
 
-        }
+        var resultReceiver = UserResultReceiver(Handler())
 
-        fun connectServer(): Boolean {
+        fun connectServer() {
             try {
-                ctx.startService(ctx.intentFor<RegistrationIntentService>())
+                val intent = ctx.intentFor<RegistrationIntentService>()
+                intent.putExtra("resultReceiverTag", resultReceiver)
+                ctx.startService(intent)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
 
-            return true
+        fun switchScreen(frag: Fragment) {
+
+            currentFragment = frag
+
+            val action = fm.beginTransaction()
+            action.replace(R.id.fragmentHolder, currentFragment)
+            action.commit()
         }
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +65,16 @@ class MainActivity : AppCompatActivity() {
         toolbar.subtitle = "Shhhh"
         setSupportActionBar(toolbar)
 
-        val frag = LoginFragment()
+        switchScreen(LoginFragment())
+    }
 
-        val action = fm.beginTransaction()
-        action.replace(R.id.fragmentHolder, frag)
-        action.commit()
+    override fun onResume() {
+        super.onResume()
+        resultReceiver.receiver = this
+    }
+
+    override fun onPause() {
+        super.onPause()
+        resultReceiver.receiver = null
     }
 }

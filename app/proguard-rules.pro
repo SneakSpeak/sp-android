@@ -19,5 +19,6 @@
 -dontwarn org.jetbrains.anko.**
 -dontwarn java.nio.file.**
 -dontwarn org.codehaus.**
+-dontwarn com.fasterxml.**
 
 -keepnames public class io.sneakspeak.**

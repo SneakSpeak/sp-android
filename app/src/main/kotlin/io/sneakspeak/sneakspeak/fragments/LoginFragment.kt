@@ -1,9 +1,12 @@
 package io.sneakspeak.sneakspeak.fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.sneakspeak.sneakspeak.MainActivity
@@ -13,8 +16,21 @@ import org.jetbrains.anko.*
 
 class LoginFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
-            = LoginUI<Fragment>().createView(AnkoContext.create(activity, this))
+    val TAG = "LoginFragment"
+    private lateinit var fragUi: LoginUI<Fragment>
+
+
+    fun sendResult(message: String) {
+        Log.d(TAG, message)
+        fragUi.dialog.dismiss()
+        fragUi.toast(message)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) : View {
+        fragUi = LoginUI<Fragment>()
+        return fragUi.createView(AnkoContext.create(activity, this))
+    }
+
 
     /**
      * Create Fragment UI using Anko DSL instead of XML.
@@ -23,6 +39,11 @@ class LoginFragment : Fragment() {
         lateinit var address: TextView
         lateinit var port: TextView
         lateinit var username: TextView
+        lateinit var dialog: ProgressDialog
+
+        fun toast(message: String) {
+            toast(message)
+        }
 
         override fun createView(ui: AnkoContext<T>) = with(ui) {
             verticalLayout {
@@ -64,31 +85,12 @@ class LoginFragment : Fragment() {
                                     port.text.toString(),
                                     username.text.toString())
 
-                            val dialog = indeterminateProgressDialog("Connecting to ${address.text.toString()}")
+                            dialog = indeterminateProgressDialog("Connecting to ${address.text.toString()}")
                             dialog.setCancelable(false)
 
                             async() {
-                                try {
-                                    if (MainActivity.connectServer()) {
-
-                                        uiThread {
-                                            toast("Connection succeeded")
-                                            dialog.dismiss()
-                                        }
-
-
-                                    } else {
-                                        uiThread {
-                                            toast("Connection failed")
-                                            dialog.dismiss()
-                                        }
-
-                                    }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
+                                MainActivity.connectServer()
                             }
-
                         }
 
                     }

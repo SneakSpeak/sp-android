@@ -21,16 +21,22 @@ class SneakGcmListenerService : GcmListenerService() {
         // super.onMessageReceived(from, data)
         Log.d(TAG, data?.toString())
 
-        sendNotification("Message received.")
+        Log.d(TAG, "Message received, do something about it.")
+
+
+
+//        var title = data?.getString("title")
+//        var message = data?.getString("body")
+//
+//        if (title == null || message == null) {
+//            Log.d(TAG, "nulleja")
+//            return
+//        }
+//
+//        sendNotification(title, message)
     }
 
-    override fun onMessageSent(msgId: String?) {
-        //super.onMessageSent(msgId)
-        Log.d(TAG, msgId)
-        sendNotification("Message sent.")
-    }
-
-    fun sendNotification(message: String) {
+    fun sendNotification(title: String, message: String) {
         try {
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -38,7 +44,7 @@ class SneakGcmListenerService : GcmListenerService() {
 
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notificationBuilder = NotificationCompat.Builder(this)
-                    .setContentTitle("GCM Message")
+                    .setContentTitle(title)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentText(message)
                     .setAutoCancel(true)
