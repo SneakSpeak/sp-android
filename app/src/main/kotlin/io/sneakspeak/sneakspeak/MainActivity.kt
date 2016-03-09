@@ -26,13 +26,13 @@ class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
         // 0: success
         if (resultCode == 0) {
             if (currentFragment is RegisterFragment)
-                (currentFragment as RegisterFragment).sendResult("Rekisteröityminen onnistui.")
+                (currentFragment as RegisterFragment).displayResult("Rekisteröityminen onnistui.")
             switchScreen(UserChatFragment())
         }
         // Failure
         else {
             if (currentFragment is RegisterFragment)
-                (currentFragment as RegisterFragment).sendResult("Rekisteröityminen ei onnistunut.")
+                (currentFragment as RegisterFragment).displayResult("Rekisteröityminen ei onnistunut.")
         }
     }
 
@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
         ctx = this
         fm = supportFragmentManager
 
-        toolbar.subtitle = "Shhhh"
         setSupportActionBar(toolbar)
 
         switchScreen(RegisterFragment())

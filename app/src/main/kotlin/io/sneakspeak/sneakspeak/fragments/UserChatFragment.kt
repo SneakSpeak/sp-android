@@ -2,43 +2,48 @@ package io.sneakspeak.sneakspeak.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.InputType
+import android.support.v7.widget.LinearLayoutManager
+import android.text.format.Time
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import org.jetbrains.anko.*
-import org.jetbrains.anko.recyclerview.v7.recyclerView
+import io.sneakspeak.sneakspeak.R
+import io.sneakspeak.sneakspeak.adapters.ChatAdapter
+import io.sneakspeak.sneakspeak.data.Message
+import io.sneakspeak.sneakspeak.managers.SettingsManager
+import kotlinx.android.synthetic.main.fragment_chat.*
+import org.jetbrains.anko.support.v4.toast
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class UserChatFragment : Fragment() {
+class UserChatFragment : Fragment(), View.OnClickListener {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
-        = ChatUI<UserChatFragment>().createView(AnkoContext.create(activity, this))
+    lateinit var adapter: ChatAdapter
 
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?)
+        = inflater?.inflate(R.layout.fragment_chat, container, false)
 
-    private class ChatUI<T> : AnkoComponent<T> {
-        override fun createView(ui: AnkoContext<T>) = with(ui) {
-            verticalLayout {
-                padding = 16
-                recyclerView {
-                    adapter = null
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        sendButton.setOnClickListener(this)
+        adapter = ChatAdapter(listOf(Message("joku", "lol", "tänään"),
+                Message("joku", "lol", "eilen")))
 
-                }.lparams { width=matchParent; height=matchParent }
+        messageList.adapter = adapter
+        val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        manager.stackFromEnd = true
+        messageList.layoutManager = manager
 
-                linearLayout {
-                    editText {
-                        inputType = InputType.TYPE_CLASS_TEXT
-                    }.lparams { width = matchParent }
+    }
 
-                    button {
-                        text = "Lähetä"
-                        onClick {
-                            toast("Viestin lähetys")
-                        }
-                    }
-                }
-            }
-        }
+    override fun onClick(button: View?) {
+        if (messageText.text.isEmpty()) return
 
-
+        val df = SimpleDateFormat("HH:mm:ss");
+        val time = df.format(Calendar.getInstance().getTime());
+        adapter.addMessage(Message(SettingsManager.getUsername(),
+                messageText.text.toString(), time))
+        messageText.text.clear()
+        messageList.scrollToPosition(adapter.itemCount - 1)
     }
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dip">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Input your server information"
+        android:textSize="20sp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:minHeight="1dip"
+        android:layout_marginBottom="10dip"/>
+
+    <EditText
+        android:id="@+id/serverAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="IP Address"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/serverPort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Port"
+        android:inputType="number"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/serverKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="GCM Key"
+        android:inputType="number"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Input your login information"
+        android:textSize="20sp"
+        android:layout_marginTop="16dip" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:minHeight="1dip"
+        android:layout_marginBottom="10dip"/>
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:imeOptions="actionDone"/>
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dip"
+        android:text="Register"/>
+
+
+</LinearLayout>

@@ -31,7 +31,7 @@ class RegistrationIntentService : IntentService("SneakIntent") {
 
     override fun onHandleIntent(intent: Intent) {
         val iID = InstanceID.getInstance(this)
-        val token = iID.getToken(getString(R.string.gcm_defaultSenderId),
+        val token = iID.getToken(getString(1),//R.string.gcm_defaultSenderId),
                 GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
 
         val address = SettingsManager.getAddress()

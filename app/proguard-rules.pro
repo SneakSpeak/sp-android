@@ -21,6 +21,7 @@
 -dontwarn org.codehaus.**
 -dontwarn com.fasterxml.**
 -dontwarn io.sneakspeak.**
+-dontwarn com.google.**
 
 -keepnames class io.sneakspeak.**
 -keepclassmembernames class io.sneakspeak.**
