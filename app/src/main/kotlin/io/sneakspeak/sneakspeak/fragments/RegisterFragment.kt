@@ -13,37 +13,32 @@ import io.sneakspeak.sneakspeak.MainActivity
 import io.sneakspeak.sneakspeak.containsText
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.toast
 
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
 
     val TAG = "LoginFragment"
-    private lateinit var fragUi: LoginUI<Fragment>
-
+    private lateinit var fragUi: RegisterUI<RegisterFragment>
 
     fun sendResult(message: String) {
         Log.d(TAG, message)
         fragUi.dialog.dismiss()
-        fragUi.toast(message)
+        toast(message)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) : View {
-        fragUi = LoginUI<Fragment>()
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        fragUi = RegisterUI<RegisterFragment>()
         return fragUi.createView(AnkoContext.create(activity, this))
     }
-
 
     /**
      * Create Fragment UI using Anko DSL instead of XML.
      */
-    private class LoginUI<T> : AnkoComponent<T> {
+    private class RegisterUI<T> : AnkoComponent<T> {
         lateinit var address: TextView
         lateinit var port: TextView
         lateinit var username: TextView
         lateinit var dialog: ProgressDialog
-
-        fun toast(message: String) {
-            toast(message)
-        }
 
         override fun createView(ui: AnkoContext<T>) = with(ui) {
             verticalLayout {
@@ -70,7 +65,7 @@ class LoginFragment : Fragment() {
                     }.lparams { width = matchParent }
                 }
 
-                button("Register / Login") {
+                button("Register") {
                     onClick {
                         if (!address.containsText()) {
                             toast("Address can't be empty")

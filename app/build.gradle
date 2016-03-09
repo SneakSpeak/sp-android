@@ -23,7 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -71,7 +71,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile "com.google.android.gms:play-services:8.4.0"
 
-    compile 'com.android.support:multidex:1.0.0'
+    //compile 'com.android.support:multidex:1.0.0'
 
     // compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.7.2'
 }

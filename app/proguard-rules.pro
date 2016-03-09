@@ -20,5 +20,7 @@
 -dontwarn java.nio.file.**
 -dontwarn org.codehaus.**
 -dontwarn com.fasterxml.**
+-dontwarn io.sneakspeak.**
 
--keepnames public class io.sneakspeak.**
+-keepnames class io.sneakspeak.**
+-keepclassmembernames class io.sneakspeak.**

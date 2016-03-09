@@ -9,7 +9,7 @@ import android.support.v4.os.ResultReceiver
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import io.sneakspeak.sneakspeak.R.layout.activity_main
-import io.sneakspeak.sneakspeak.fragments.LoginFragment
+import io.sneakspeak.sneakspeak.fragments.RegisterFragment
 import io.sneakspeak.sneakspeak.gcm.RegistrationIntentService
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
         Log.d(TAG, "Received: $resultData")
 
-        if (currentFragment is LoginFragment)
-            (currentFragment as LoginFragment).sendResult("jou")
+        if (currentFragment is RegisterFragment)
+            (currentFragment as RegisterFragment).sendResult("jou")
     }
 
     companion object {
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
         toolbar.subtitle = "Shhhh"
         setSupportActionBar(toolbar)
 
-        switchScreen(LoginFragment())
+        switchScreen(RegisterFragment())
     }
 
     override fun onResume() {
