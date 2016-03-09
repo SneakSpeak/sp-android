@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import io.sneakspeak.sneakspeak.R.layout.activity_main
 import io.sneakspeak.sneakspeak.fragments.RegisterFragment
+import io.sneakspeak.sneakspeak.fragments.UserChatFragment
 import io.sneakspeak.sneakspeak.gcm.RegistrationIntentService
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
@@ -20,8 +21,19 @@ class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
         Log.d(TAG, "Received: $resultData")
 
-        if (currentFragment is RegisterFragment)
-            (currentFragment as RegisterFragment).sendResult("jou")
+        // Todo: save users and channels from data to persistent storage or something
+
+        // 0: success
+        if (resultCode == 0) {
+            if (currentFragment is RegisterFragment)
+                (currentFragment as RegisterFragment).sendResult("Rekisteröityminen onnistui.")
+            switchScreen(UserChatFragment())
+        }
+        // Failure
+        else {
+            if (currentFragment is RegisterFragment)
+                (currentFragment as RegisterFragment).sendResult("Rekisteröityminen ei onnistunut.")
+        }
     }
 
     companion object {

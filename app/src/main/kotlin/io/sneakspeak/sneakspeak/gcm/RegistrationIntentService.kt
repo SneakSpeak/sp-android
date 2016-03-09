@@ -47,18 +47,17 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         Log.d(TAG, "Sending registration.")
 
         val users: ArrayList<String>
+        val bundle = Bundle()
 
         try {
             users = HttpManager.register(regUrl, json)
+            Log.d(TAG, "Register successful, users: ${users.toString()}")
+            bundle.putStringArrayList("userList", users)
+            receiver?.send(0, bundle)
         } catch (e: Exception) {
             e.printStackTrace()
-            return
+            Log.d(TAG, "Failed to register to server.")
+            receiver?.send(1, bundle)
         }
-
-        Log.d(TAG, users.toString())
-
-        val bundle = Bundle()
-        bundle.putStringArrayList("userList", users)
-        receiver?.send(0, bundle)
     }
 }
