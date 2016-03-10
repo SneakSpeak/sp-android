@@ -1,4 +1,4 @@
-package io.sneakspeak.sneakspeak
+package io.sneakspeak.sneakspeak.receiver
 
 import android.os.Bundle
 import android.os.Handler

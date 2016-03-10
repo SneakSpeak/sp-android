@@ -12,6 +12,8 @@ import io.sneakspeak.sneakspeak.R.layout.activity_main
 import io.sneakspeak.sneakspeak.fragments.RegisterFragment
 import io.sneakspeak.sneakspeak.fragments.UserChatFragment
 import io.sneakspeak.sneakspeak.gcm.RegistrationIntentService
+import io.sneakspeak.sneakspeak.receiver.MessageResultReceiver
+import io.sneakspeak.sneakspeak.receiver.UserResultReceiver
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
 

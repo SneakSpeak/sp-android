@@ -11,6 +11,8 @@ import android.util.Log
 import com.google.android.gms.gcm.GcmListenerService
 import io.sneakspeak.sneakspeak.MainActivity
 import io.sneakspeak.sneakspeak.R
+import io.sneakspeak.sneakspeak.fragments.UserChatFragment
+import io.sneakspeak.sneakspeak.receiver.MessageResultReceiver
 
 
 class SneakGcmListenerService : GcmListenerService() {
@@ -22,6 +24,8 @@ class SneakGcmListenerService : GcmListenerService() {
         Log.d(TAG, data?.toString())
 
         Log.d(TAG, "Message received, do something about it.")
+
+        UserChatFragment.messageReceiver.send(0, Bundle())
 
 
 

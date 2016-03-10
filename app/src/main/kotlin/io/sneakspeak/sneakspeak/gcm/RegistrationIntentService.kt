@@ -8,7 +8,7 @@ import android.util.Log
 import com.google.android.gms.gcm.GoogleCloudMessaging
 import com.google.android.gms.iid.InstanceID
 import io.sneakspeak.sneakspeak.R
-import io.sneakspeak.sneakspeak.UserResultReceiver
+import io.sneakspeak.sneakspeak.receiver.UserResultReceiver
 import io.sneakspeak.sneakspeak.managers.HttpManager
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import org.jetbrains.anko.async
@@ -31,7 +31,7 @@ class RegistrationIntentService : IntentService("SneakIntent") {
 
     override fun onHandleIntent(intent: Intent) {
         val iID = InstanceID.getInstance(this)
-        val token = iID.getToken(getString(1),//R.string.gcm_defaultSenderId),
+        val token = iID.getToken("943308880121",//R.string.gcm_defaultSenderId),
                 GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
 
         val address = SettingsManager.getAddress()

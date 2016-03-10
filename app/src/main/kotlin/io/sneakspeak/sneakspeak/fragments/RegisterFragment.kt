@@ -27,8 +27,11 @@ class RegisterFragment : Fragment(), View.OnClickListener {
             = inflater?.inflate(R.layout.fragment_register, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        registerButton.setOnClickListener(this)
+        serverAddress.setText(SettingsManager.getAddress())
+        serverPort.setText(SettingsManager.getPort())
+        username.setText(SettingsManager.getUsername())
 
+        registerButton.setOnClickListener(this)
     }
 
 
