@@ -26,8 +26,11 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
         var messageReceiver = MessageResultReceiver(Handler())
     }
 
-    override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-        adapter.addMessage(Message("joku pälli", resultData?.toString() ?: "lol", "just ny"))
+    override fun onReceiveResult(resultCode: Int, data: Bundle?) {
+        if (data == null) return
+
+        adapter.addMessage(Message(data.getString("sender"),
+                data.getString("message"), data.getString("time")))
     }
 
     lateinit var adapter: ChatAdapter
@@ -38,8 +41,7 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         sendButton.setOnClickListener(this)
-        adapter = ChatAdapter(listOf(Message("joku", "lol", "tänään"),
-                Message("joku", "lol", "eilen")))
+        adapter = ChatAdapter()
 
         messageList.adapter = adapter
         val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
@@ -52,7 +54,8 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
         if (messageText.text.isEmpty()) return
 
         val df = SimpleDateFormat("HH:mm:ss");
-        val time = df.format(Calendar.getInstance().getTime());
+        val time = df.format(Calendar.getInstance().time);
+
         adapter.addMessage(Message(SettingsManager.getUsername(),
                 messageText.text.toString(), time))
         messageText.text.clear()

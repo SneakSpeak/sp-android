@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_message.view.*
 import java.util.*
 
 
-class ChatAdapter(messageList: List<Message>) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
+class ChatAdapter(messageList: List<Message> = ArrayList<Message>()) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val message = itemView.message

@@ -13,6 +13,8 @@ import io.sneakspeak.sneakspeak.MainActivity
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.fragments.UserChatFragment
 import io.sneakspeak.sneakspeak.receiver.MessageResultReceiver
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class SneakGcmListenerService : GcmListenerService() {
@@ -25,18 +27,17 @@ class SneakGcmListenerService : GcmListenerService() {
 
         Log.d(TAG, "Message received, do something about it.")
 
-        UserChatFragment.messageReceiver.send(0, Bundle())
+        val df = SimpleDateFormat("HH:mm:ss");
+        val time = df.format(Calendar.getInstance().time);
 
+        val bundle = Bundle()
+        val msg = data?.getBundle("notification")
+        bundle.putString("sender", msg?.getString("title"))
+        bundle.putString("message", msg?.getString("body"))
+        bundle.putString("time", time)
 
+        UserChatFragment.messageReceiver.send(0, bundle)
 
-//        var title = data?.getString("title")
-//        var message = data?.getString("body")
-//
-//        if (title == null || message == null) {
-//            Log.d(TAG, "nulleja")
-//            return
-//        }
-//
 //        sendNotification(title, message)
     }
 
