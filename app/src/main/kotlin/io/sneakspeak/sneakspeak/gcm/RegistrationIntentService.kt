@@ -30,34 +30,45 @@ class RegistrationIntentService : IntentService("SneakIntent") {
     }
 
     override fun onHandleIntent(intent: Intent) {
-        val iID = InstanceID.getInstance(this)
-        val token = iID.getToken("943308880121",//R.string.gcm_defaultSenderId),
-                GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
+        // Fetch server GCM-key
 
+        // Todo: separate different server data
         val address = SettingsManager.getAddress()
         val port = SettingsManager.getPort()
         val username = SettingsManager.getUsername()
 
-        val regUrl = "http://$address:$port/api/user/register"
-        val json = JSONObject()
+        val baseUrl = "http://$address:$port"
 
-        json.put("username", username)
-        json.put("token", token)
-
-        Log.d(TAG, "Sending registration.")
-
-        val users: ArrayList<String>
-        val bundle = Bundle()
-
-        try {
-            users = HttpManager.register(regUrl, json)
-            Log.d(TAG, "Register successful, users: ${users.toString()}")
-            bundle.putStringArrayList("userList", users)
-            receiver?.send(0, bundle)
+        val gcmKey = try {
+            HttpManager.getGcmKey(baseUrl)
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d(TAG, "Failed to register to server.")
-            receiver?.send(1, bundle)
+            Log.e(TAG, "Failed to request GCM key.")
+            receiver?.send(1, null)
+            return
         }
+
+        // Create token and send it to server
+        val iID = InstanceID.getInstance(this)
+        val token = iID.getToken(gcmKey,
+                GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
+
+        val registerPayload = JSONObject()
+        registerPayload.put("username", username)
+        registerPayload.put("token", token)
+
+        val users = try {
+            HttpManager.register(baseUrl, registerPayload)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e(TAG, "Failed to register to server.")
+            receiver?.send(2, null)
+            return
+        }
+
+        Log.d(TAG, "Register successful, users: $users")
+        val bundle = Bundle()
+        bundle.putStringArrayList("userList", users)
+        receiver?.send(0, bundle)
     }
 }

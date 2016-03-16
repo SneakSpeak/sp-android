@@ -26,11 +26,11 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
         var messageReceiver = MessageResultReceiver(Handler())
     }
 
-    override fun onReceiveResult(resultCode: Int, data: Bundle?) {
-        if (data == null) return
+    override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
+        if (resultData == null) return
 
-        adapter.addMessage(Message(data.getString("sender"),
-                data.getString("message"), data.getString("time")))
+        adapter.addMessage(Message(resultData.getString("sender"),
+                resultData.getString("message"), resultData.getString("time")))
     }
 
     lateinit var adapter: ChatAdapter

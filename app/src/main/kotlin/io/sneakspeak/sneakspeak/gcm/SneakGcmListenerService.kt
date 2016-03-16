@@ -38,7 +38,7 @@ class SneakGcmListenerService : GcmListenerService() {
 
         UserChatFragment.messageReceiver.send(0, bundle)
 
-//        sendNotification(title, message)
+//      sendNotification(title, message)
     }
 
     fun sendNotification(title: String, message: String) {

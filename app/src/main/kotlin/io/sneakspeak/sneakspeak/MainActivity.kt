@@ -18,49 +18,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.intentFor
 
 
-class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
-
-    override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-        Log.d(TAG, "Received: $resultData")
-
-        // Todo: save users and channels from data to persistent storage or something
-
-        // 0: success
-        if (resultCode == 0) {
-            if (currentFragment is RegisterFragment)
-                (currentFragment as RegisterFragment).displayResult("Rekisteröityminen onnistui.")
-            switchScreen(UserChatFragment())
-        }
-        // Failure
-        else {
-            if (currentFragment is RegisterFragment)
-                (currentFragment as RegisterFragment).displayResult("Rekisteröityminen ei onnistunut.")
-        }
-    }
+class MainActivity : AppCompatActivity() {
 
     companion object {
 
         val TAG = "MainActivity"
 
-        lateinit var ctx: Context;
+        // lateinit var ctx: Context;
         lateinit var fm: FragmentManager
         lateinit var currentFragment: Fragment
 
-
-        var resultReceiver = UserResultReceiver(Handler())
-
-        fun connectServer() {
-            try {
-                val intent = ctx.intentFor<RegistrationIntentService>()
-                intent.putExtra("resultReceiverTag", resultReceiver)
-                ctx.startService(intent)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
         fun switchScreen(frag: Fragment) {
-
             currentFragment = frag
 
             val action = fm.beginTransaction()
@@ -73,21 +41,11 @@ class MainActivity : AppCompatActivity(), UserResultReceiver.Receiver {
         super.onCreate(savedInstanceState)
         setContentView(activity_main)
 
-        ctx = this
+        // ctx = this
         fm = supportFragmentManager
 
         setSupportActionBar(toolbar)
 
         switchScreen(RegisterFragment())
-    }
-
-    override fun onResume() {
-        super.onResume()
-        resultReceiver.receiver = this
-    }
-
-    override fun onPause() {
-        super.onPause()
-        resultReceiver.receiver = null
     }
 }

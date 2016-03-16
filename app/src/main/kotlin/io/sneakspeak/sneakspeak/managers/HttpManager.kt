@@ -10,30 +10,80 @@ import org.json.JSONObject
 import java.util.*
 
 object HttpManager {
+
     val TAG = "HttpManager"
     val httpClient = OkHttpClient()
     val JSON = MediaType.parse("application/json; charset=utf-8")
 
 
-    fun register(url: String, json: JSONObject): ArrayList<String> {
+    fun getGcmKey(server: String): String {
 
-        Log.d(TAG, json.toString())
+        Log.d(TAG, "Asking for GCM key")
+
+        val url = "$server/api/gcm/key"
+
+        val request = Request.Builder()
+                .url(url)
+                .get()
+                .build()
+
+        val response = httpClient.newCall(request).execute()
+
+        Log.d(TAG, "Got response: $response")
+
+        val key = response.body().string()
+        response.body().close()
+
+        Log.d(TAG, "Received key: $key")
+
+        return key
+    }
+
+    fun register(server: String, json: JSONObject): ArrayList<String> {
+
+        Log.d(TAG, "Sending register request")
+
+        val url = "$server/api/user/register"
 
         val body = RequestBody.create(JSON, json.toString())
 
-        var request = Request.Builder()
+        val request = Request.Builder()
                 .url(url)
                 .post(body)
                 .build()
 
         val response = httpClient.newCall(request).execute()
-        Log.d(TAG, response.toString())
-        val resBody = response.body().string()
+        Log.d(TAG, "Got response: $response")
 
+        val users = parseUsers(response.body().string())
+        response.body().close()
+        return users
+    }
+
+    fun getUsers(server: String): List<String> {
+
+        Log.d(TAG, "Asking user list")
+
+        // Todo: fix
+        // ?token={token}
+        val url = "$server/api/user/list?username=${SettingsManager.getUsername()}"
+
+        val request = Request.Builder()
+                .url(url)
+                .get()
+                .build()
+
+        val response = httpClient.newCall(request).execute()
+        Log.d(TAG, "Got response: $response")
+
+        val users = parseUsers(response.body().string())
+        response.body().close()
+        return users
+    }
+
+    private fun parseUsers(json: String): ArrayList<String> {
         val users = ArrayList<String>()
-        val usersJson = JSONArray(resBody)
-
-        // response.body().close()
+        val usersJson = JSONArray(json)
 
         for (i in 0..usersJson.length()-1)
             users.add(usersJson.getString(i))

@@ -35,14 +35,14 @@
         android:singleLine="true"
         android:imeOptions="actionNext"/>
 
-    <EditText
-        android:id="@+id/serverKey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="GCM Key"
-        android:inputType="number"
-        android:singleLine="true"
-        android:imeOptions="actionNext"/>
+    <!--<EditText-->
+        <!--android:id="@+id/serverKey"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="GCM Key"-->
+        <!--android:inputType="number"-->
+        <!--android:singleLine="true"-->
+        <!--android:imeOptions="actionNext"/>-->
 
     <TextView
         android:layout_width="wrap_content"
