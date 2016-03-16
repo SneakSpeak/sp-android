@@ -35,14 +35,24 @@
         android:singleLine="true"
         android:imeOptions="actionNext"/>
 
-    <!--<EditText-->
-        <!--android:id="@+id/serverKey"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:hint="GCM Key"-->
-        <!--android:inputType="number"-->
-        <!--android:singleLine="true"-->
-        <!--android:imeOptions="actionNext"/>-->
+    <EditText
+        android:id="@+id/serverName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Server name (optional)"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
+
+
+    <!--    <EditText
+            android:id="@+id/serverKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="GCM Key"
+            android:inputType="number"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
+    -->
 
     <TextView
         android:layout_width="wrap_content"
@@ -64,8 +74,9 @@
         android:layout_height="wrap_content"
         android:hint="Username"
         android:singleLine="true"
-        android:imeOptions="actionNext"/>
+        android:imeOptions="actionDone"/>
 
+<!--
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
@@ -74,6 +85,7 @@
         android:inputType="textPassword"
         android:singleLine="true"
         android:imeOptions="actionDone"/>
+-->
 
     <Button
         android:id="@+id/registerButton"

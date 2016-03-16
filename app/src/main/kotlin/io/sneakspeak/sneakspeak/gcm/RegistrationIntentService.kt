@@ -35,7 +35,6 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         // Todo: separate different server data
         val address = SettingsManager.getAddress()
         val port = SettingsManager.getPort()
-        val username = SettingsManager.getUsername()
 
         val baseUrl = "http://$address:$port"
 
@@ -54,7 +53,7 @@ class RegistrationIntentService : IntentService("SneakIntent") {
                 GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
 
         val registerPayload = JSONObject()
-        registerPayload.put("username", username)
+        registerPayload.put("username", SettingsManager.getUsername())
         registerPayload.put("token", token)
 
         val users = try {
