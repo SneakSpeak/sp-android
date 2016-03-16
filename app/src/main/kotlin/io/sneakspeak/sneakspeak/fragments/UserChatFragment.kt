@@ -8,8 +8,10 @@ import android.text.format.Time
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.sneakspeak.sneakspeak.MainActivity
+import com.google.android.gms.gcm.GoogleCloudMessaging
+import io.sneakspeak.sneakspeak.activities.MainActivity
 import io.sneakspeak.sneakspeak.R
+import io.sneakspeak.sneakspeak.SneakSpeak
 import io.sneakspeak.sneakspeak.adapters.ChatAdapter
 import io.sneakspeak.sneakspeak.data.Message
 import io.sneakspeak.sneakspeak.managers.SettingsManager
@@ -18,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_chat.*
 import org.jetbrains.anko.support.v4.toast
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
 
 class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver.Receiver {
@@ -25,6 +28,8 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
     companion object {
         var messageReceiver = MessageResultReceiver(Handler())
     }
+    val msgId = AtomicInteger()
+    val gcm = GoogleCloudMessaging.getInstance(SneakSpeak.context);
 
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
         if (resultData == null) return
@@ -58,8 +63,18 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
 
         adapter.addMessage(Message(SettingsManager.getUsername(),
                 messageText.text.toString(), time))
-        messageText.text.clear()
+
         messageList.scrollToPosition(adapter.itemCount - 1)
+
+        // Todo: get the ID and receiver from somewhere
+                    val SENDER_ID = "943308880121"
+                    val data = Bundle()
+                    data.putString("receiver", "ville2")
+                    data.putString("message", messageText.text.toString())
+                    val id = Integer.toString(msgId.incrementAndGet())
+                    gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
+
+        messageText.text.clear()
     }
 
     override fun onResume() {

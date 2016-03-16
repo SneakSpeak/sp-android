@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.google.android.gms.gcm.GoogleCloudMessaging
-import io.sneakspeak.sneakspeak.MainActivity
+import io.sneakspeak.sneakspeak.activities.MainActivity
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.SneakSpeak
 import io.sneakspeak.sneakspeak.containsText
@@ -107,7 +107,7 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
         if (resultCode == 0) {
             dialog?.dismiss()
             toast("Rekisteröityminen onnistui.")
-            MainActivity.switchScreen(UserChatFragment())
+            // MainActivity.switchScreen(UserChatFragment())
         }
         // Failure (or other results later on?
         else {

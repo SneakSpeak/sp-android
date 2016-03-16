@@ -13,9 +13,4 @@ class SneakSpeak : Application() {
         super.onCreate()
         context = applicationContext
     }
-
-//    override fun attachBaseContext(base: Context?) {
-//        super.attachBaseContext(base)
-//        MultiDex.install(this)
-//    }
 }

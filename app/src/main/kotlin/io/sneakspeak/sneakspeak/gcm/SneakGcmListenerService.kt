@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.support.v7.app.NotificationCompat
 import android.util.Log
 import com.google.android.gms.gcm.GcmListenerService
-import io.sneakspeak.sneakspeak.MainActivity
+import io.sneakspeak.sneakspeak.activities.MainActivity
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.fragments.UserChatFragment
 import io.sneakspeak.sneakspeak.receiver.MessageResultReceiver
