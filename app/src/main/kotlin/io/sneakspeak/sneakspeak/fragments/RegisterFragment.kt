@@ -1,6 +1,8 @@
 package io.sneakspeak.sneakspeak.fragments
 
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
@@ -15,6 +17,7 @@ import io.sneakspeak.sneakspeak.activities.MainActivity
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.SneakSpeak
 import io.sneakspeak.sneakspeak.containsText
+import io.sneakspeak.sneakspeak.data.Server
 import io.sneakspeak.sneakspeak.gcm.RegistrationIntentService
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import io.sneakspeak.sneakspeak.receiver.UserResultReceiver
@@ -35,14 +38,14 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
 
     var resultReceiver = UserResultReceiver(Handler())
 
-    fun connectServer() {
-        try {
-            val intent = activity.intentFor<RegistrationIntentService>()
-            intent.putExtra("resultReceiverTag", resultReceiver)
-            activity.startService(intent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        resultReceiver.receiver = this
+    }
+
+    override fun onPause() {
+        super.onPause()
+        resultReceiver.receiver = null
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
@@ -55,7 +58,6 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
 
         registerButton.setOnClickListener(this)
     }
-
 
     override fun onClick(view: View?) {
         if (!serverAddress.containsText()) {
@@ -75,23 +77,6 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
             dialog = indeterminateProgressDialog("Connecting to ${serverAddress.text.toString()}")
             dialog?.setCancelable(false)
 
-//            async() {
-//
-//
-//                try {
-//
-//
-//            val SENDER_ID = "943308880121"
-//            val data = Bundle()
-//            data.putString("my_message", "Hello World")
-//            data.putString("my_action","SAY_HELLO")
-//            val id = Integer.toString(msgId.incrementAndGet())
-//            gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                }
-//
-//            }
             async() {
                 connectServer()
             }
@@ -99,7 +84,7 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
     }
 
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-        Log.d(MainActivity.TAG, "Received: $resultData")
+        Log.d(TAG, "Received: $resultData")
 
         // Todo: save users and channels from data to persistent storage or something
 
@@ -107,7 +92,11 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
         if (resultCode == 0) {
             dialog?.dismiss()
             toast("Rekisteröityminen onnistui.")
-            // MainActivity.switchScreen(UserChatFragment())
+
+            val intent = Intent()
+            intent.putExtra("server", Server("a", "b", "c", "d", "e"))
+            activity.setResult(Activity.RESULT_OK, intent)
+            activity.finish()
         }
         // Failure (or other results later on?
         else {
@@ -116,15 +105,16 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        resultReceiver.receiver = this
+    fun connectServer() {
+        try {
+            val intent = activity.intentFor<RegistrationIntentService>()
+            intent.putExtra("resultReceiverTag", resultReceiver)
+            activity.startService(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
-        resultReceiver.receiver = null
-    }
 
 }
 

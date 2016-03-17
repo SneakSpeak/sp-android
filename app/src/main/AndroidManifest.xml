@@ -30,6 +30,15 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:label="Register a new server"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.MainActivity">
+
+
+        </activity>
+
         <!-- GCM RECEIVER -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

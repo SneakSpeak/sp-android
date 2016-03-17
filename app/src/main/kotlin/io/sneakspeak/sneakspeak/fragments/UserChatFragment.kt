@@ -28,8 +28,10 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
     companion object {
         var messageReceiver = MessageResultReceiver(Handler())
     }
+
     val msgId = AtomicInteger()
     val gcm = GoogleCloudMessaging.getInstance(SneakSpeak.context);
+    lateinit var adapter: ChatAdapter
 
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
         if (resultData == null) return
@@ -37,9 +39,6 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
         adapter.addMessage(Message(resultData.getString("sender"),
                 resultData.getString("message"), resultData.getString("time")))
     }
-
-    lateinit var adapter: ChatAdapter
-
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?)
         = inflater?.inflate(R.layout.fragment_chat, container, false)

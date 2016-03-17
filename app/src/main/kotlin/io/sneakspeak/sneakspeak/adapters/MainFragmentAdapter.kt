@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.util.Log
 import io.sneakspeak.sneakspeak.fragments.GreetingFragment
 import io.sneakspeak.sneakspeak.fragments.RegisterFragment
+import io.sneakspeak.sneakspeak.fragments.ServerFragment
 import io.sneakspeak.sneakspeak.fragments.UserChatFragment
 import java.util.*
 
@@ -21,7 +22,7 @@ class MainFragmentAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     init {
         Log.d(TAG, "Creating fragments.")
 
-        fragments.add(RegisterFragment())
+        fragments.add(ServerFragment())
         fragments.add(UserChatFragment())
         fragments.add(GreetingFragment())
     }
