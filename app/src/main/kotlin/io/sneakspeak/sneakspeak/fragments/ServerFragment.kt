@@ -11,13 +11,17 @@ import android.view.ViewGroup
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.activities.RegisterActivity
 import io.sneakspeak.sneakspeak.data.Server
-import kotlinx.android.synthetic.main.fragment_servers.*
+import kotlinx.android.synthetic.main.fragment_server_list.*
 
-class ServerFragment : Fragment(), View.OnClickListener {
+class ServerFragment(user: UserListFragment, channel: ChannelListFragment) : Fragment(), View.OnClickListener {
+
     val TAG = "ServerFragment"
 
+    val userFrag = user
+    val channelFrag = channel
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?)
-            = inflater?.inflate(R.layout.fragment_servers, container, false)
+            = inflater?.inflate(R.layout.fragment_server_list, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         addServer.setOnClickListener(this)
@@ -36,7 +40,13 @@ class ServerFragment : Fragment(), View.OnClickListener {
         // Todo: save it to the storage and push to the list
         if (resultCode == Activity.RESULT_OK) {
             val server = data?.extras?.getSerializable("server") as Server
+            val users = data?.extras?.getStringArrayList("users")
             Log.d(TAG, server.toString())
+            Log.d(TAG, users.toString())
+
+            if (users != null)
+                userFrag.updateUsers(users)
+
         }
     }
 }

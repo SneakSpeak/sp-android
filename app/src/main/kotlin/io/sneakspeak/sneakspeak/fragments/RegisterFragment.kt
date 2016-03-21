@@ -31,8 +31,8 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
 
     val TAG = "RegisterFragment"
 
-    val msgId = AtomicInteger()
-    val gcm = GoogleCloudMessaging.getInstance(SneakSpeak.context);
+    // val msgId = AtomicInteger()
+    // val gcm = GoogleCloudMessaging.getInstance(SneakSpeak.context);
 
     var dialog: ProgressDialog? = null
 
@@ -86,21 +86,42 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
         Log.d(TAG, "Received: $resultData")
 
+        dialog?.dismiss()
+
+        val token = resultData?.getString("token")
+        val users = resultData?.getStringArrayList("users")
+
         // Todo: save users and channels from data to persistent storage or something
+        if (token == null || users == null) {
+            toast("token tai userit on nulleja")
+            return
+        }
+
 
         // 0: success
         if (resultCode == 0) {
-            dialog?.dismiss()
             toast("Rekisteröityminen onnistui.")
 
             val intent = Intent()
-            intent.putExtra("server", Server("a", "b", "c", "d", "e"))
+            val server = Server(
+                    serverAddress.text.toString(),
+                    serverPort.text.toString(),
+                    if (serverName.text.toString() == "")
+                        serverAddress.text.toString()
+                    else
+                        serverName.text.toString(),
+                    token,
+                    username.text.toString())
+
+
+            intent.putExtra("server", server)
+            intent.putExtra("users", users)
+
             activity.setResult(Activity.RESULT_OK, intent)
             activity.finish()
         }
         // Failure (or other results later on?
         else {
-            dialog?.dismiss()
             toast("Rekisteröityminen ei onnistunut.")
         }
     }

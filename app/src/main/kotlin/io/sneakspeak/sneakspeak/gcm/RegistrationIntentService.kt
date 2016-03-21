@@ -67,7 +67,8 @@ class RegistrationIntentService : IntentService("SneakIntent") {
 
         Log.d(TAG, "Register successful, users: $users")
         val bundle = Bundle()
-        bundle.putStringArrayList("userList", users)
+        bundle.putStringArrayList("users", users)
+        bundle.putString("token", token)
         receiver?.send(0, bundle)
     }
 }

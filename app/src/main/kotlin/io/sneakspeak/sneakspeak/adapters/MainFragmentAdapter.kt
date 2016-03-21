@@ -4,10 +4,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.Log
-import io.sneakspeak.sneakspeak.fragments.GreetingFragment
-import io.sneakspeak.sneakspeak.fragments.RegisterFragment
-import io.sneakspeak.sneakspeak.fragments.ServerFragment
-import io.sneakspeak.sneakspeak.fragments.UserChatFragment
+import io.sneakspeak.sneakspeak.fragments.*
 import java.util.*
 
 
@@ -22,9 +19,15 @@ class MainFragmentAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     init {
         Log.d(TAG, "Creating fragments.")
 
-        fragments.add(ServerFragment())
-        fragments.add(UserChatFragment())
-        fragments.add(GreetingFragment())
+        val userFrag = UserListFragment()
+        val channelFrag = ChannelListFragment()
+
+        // Inject userFrag and channelFrag so we can feed them received server data
+        val serverFrag = ServerFragment(userFrag, channelFrag)
+
+        fragments.add(serverFrag)
+        fragments.add(userFrag)
+        fragments.add(channelFrag)
     }
 
 

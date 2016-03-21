@@ -4,25 +4,18 @@
     android:layout_height="match_parent"
     android:id="@+id/fragmentChat">
 
-    <EditText
-        android:id="@+id/messageText"
+    <Button
+        android:id="@+id/updateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Update"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/sendButton"/>
-
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_centerHorizontal="true"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/messageList"
+        android:id="@+id/userList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/sendButton"/>
+        android:layout_above="@+id/updateButton"/>
 
 </RelativeLayout>

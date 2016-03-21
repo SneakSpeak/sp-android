@@ -12,7 +12,7 @@ import java.util.*
 
 class ChatAdapter(messageList: List<Message> = ArrayList<Message>()) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val message = itemView.message
         val sender = itemView.sender
         val time = itemView.time
