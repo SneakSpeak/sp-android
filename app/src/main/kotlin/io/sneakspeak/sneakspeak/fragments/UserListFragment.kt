@@ -24,7 +24,7 @@ class UserListFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         updateButton.setOnClickListener(this)
-        adapter = UserListAdapter()
+        adapter = UserListAdapter(activity)
         val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
         userList.adapter = adapter

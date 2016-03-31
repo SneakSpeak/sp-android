@@ -35,9 +35,15 @@
             android:label="Register a new server"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".activities.MainActivity">
-
-
         </activity>
+
+        <activity
+            android:name=".activities.ChatActivity"
+            android:label="Now chatting with"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.MainActivity">
+        </activity>
+
 
         <!-- GCM RECEIVER -->
         <receiver

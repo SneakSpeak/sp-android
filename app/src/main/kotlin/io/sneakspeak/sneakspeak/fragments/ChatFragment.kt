@@ -23,7 +23,9 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver.Receiver {
+class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResultReceiver.Receiver {
+
+    val chatUser = user
 
     companion object {
         var messageReceiver = MessageResultReceiver(Handler())
@@ -41,7 +43,7 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?)
-        = inflater?.inflate(R.layout.fragment_chat, container, false)
+            = inflater?.inflate(R.layout.fragment_chat, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         sendButton.setOnClickListener(this)
@@ -66,12 +68,12 @@ class UserChatFragment : Fragment(), View.OnClickListener, MessageResultReceiver
         messageList.scrollToPosition(adapter.itemCount - 1)
 
         // Todo: get the ID and receiver from somewhere
-                    val SENDER_ID = "943308880121"
-                    val data = Bundle()
-                    data.putString("receiver", "ville2")
-                    data.putString("message", messageText.text.toString())
-                    val id = Integer.toString(msgId.incrementAndGet())
-                    gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
+        val SENDER_ID = "943308880121"
+        val data = Bundle()
+        data.putString("receiver", chatUser)
+        data.putString("message", messageText.text.toString())
+        val id = Integer.toString(msgId.incrementAndGet())
+        gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
 
         messageText.text.clear()
     }

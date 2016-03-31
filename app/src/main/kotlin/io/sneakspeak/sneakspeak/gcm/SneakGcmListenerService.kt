@@ -11,7 +11,7 @@ import android.util.Log
 import com.google.android.gms.gcm.GcmListenerService
 import io.sneakspeak.sneakspeak.activities.MainActivity
 import io.sneakspeak.sneakspeak.R
-import io.sneakspeak.sneakspeak.fragments.UserChatFragment
+import io.sneakspeak.sneakspeak.fragments.ChatFragment
 import io.sneakspeak.sneakspeak.receiver.MessageResultReceiver
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,7 +19,7 @@ import java.util.*
 
 class SneakGcmListenerService : GcmListenerService() {
 
-    val TAG = "GcmListenerService"
+    val TAG = "SneakGcmListenerService"
 
     override fun onMessageReceived(from: String?, data: Bundle?) {
         // super.onMessageReceived(from, data)
@@ -32,11 +32,13 @@ class SneakGcmListenerService : GcmListenerService() {
 
         val bundle = Bundle()
         val msg = data?.getBundle("notification")
+
+        // Todo: check the bundle for nulls
         bundle.putString("sender", msg?.getString("title"))
         bundle.putString("message", msg?.getString("body"))
         bundle.putString("time", time)
 
-        UserChatFragment.messageReceiver.send(0, bundle)
+        ChatFragment.messageReceiver.send(0, bundle)
 
 //      sendNotification(title, message)
     }
