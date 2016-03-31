@@ -40,6 +40,7 @@ class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResu
 
         adapter.addMessage(Message(resultData.getString("sender"),
                 resultData.getString("message"), resultData.getString("time")))
+        messageList.scrollToPosition(adapter.itemCount - 1)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?)

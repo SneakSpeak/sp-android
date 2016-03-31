@@ -25,6 +25,11 @@ class SneakGcmListenerService : GcmListenerService() {
         // super.onMessageReceived(from, data)
         Log.d(TAG, data?.toString())
 
+        // Play notification sound
+        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val ringtone = RingtoneManager.getRingtone(applicationContext, notification);
+        ringtone.play();
+
         Log.d(TAG, "Message received, do something about it.")
 
         val df = SimpleDateFormat("HH:mm:ss");
