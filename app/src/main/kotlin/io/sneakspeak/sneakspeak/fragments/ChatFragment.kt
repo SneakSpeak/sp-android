@@ -1,5 +1,6 @@
 package io.sneakspeak.sneakspeak.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
@@ -69,6 +70,10 @@ class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResu
                 messageText.text.toString(), time))
 
         messageList.scrollToPosition(adapter.itemCount - 1)
+
+        // Todo: unnecessary?
+        context.sendBroadcast(Intent("com.google.android.intent.action.GTALK_HEARTBEAT"))
+        context.sendBroadcast(Intent("com.google.android.intent.action.MCS_HEARTBEAT"))
 
         // Todo: get the ID and receiver from somewhere
         val SENDER_ID = "943308880121"

@@ -21,6 +21,16 @@ class SneakGcmListenerService : GcmListenerService() {
 
     val TAG = "SneakGcmListenerService"
 
+    override fun onMessageSent(msgId: String?) {
+        super.onMessageSent(msgId)
+        Log.d(TAG, "Message sent with id: $msgId")
+    }
+
+    override fun onSendError(msgId: String?, error: String?) {
+        super.onSendError(msgId, error)
+        Log.e(TAG, "Error sending message: $msgId, error: $error")
+    }
+
     override fun onMessageReceived(from: String?, data: Bundle?) {
         // super.onMessageReceived(from, data)
         Log.d(TAG, data?.toString())
