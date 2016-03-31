@@ -36,11 +36,11 @@ class SneakGcmListenerService : GcmListenerService() {
         val time = df.format(Calendar.getInstance().time);
 
         val bundle = Bundle()
-        val msg = data?.getBundle("notification")
+        // val msg = data?.getBundle("notification")
 
         // Todo: check the bundle for nulls
-        bundle.putString("sender", msg?.getString("title"))
-        bundle.putString("message", msg?.getString("body"))
+        bundle.putString("sender", data?.getString("title"))
+        bundle.putString("message", data?.getString("message"))
         bundle.putString("time", time)
 
         ChatFragment.messageReceiver.send(0, bundle)

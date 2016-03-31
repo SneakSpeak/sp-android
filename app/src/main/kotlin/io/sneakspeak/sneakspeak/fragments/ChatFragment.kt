@@ -5,6 +5,7 @@ import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.format.Time
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResultReceiver.Receiver {
 
+    val TAG = "ChatFragment"
     val chatUser = user
 
     companion object {
@@ -77,6 +79,7 @@ class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResu
         gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
 
         messageText.text.clear()
+        Log.d(TAG, data.toString())
     }
 
     override fun onResume() {
