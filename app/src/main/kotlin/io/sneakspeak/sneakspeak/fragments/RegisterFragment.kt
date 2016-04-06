@@ -25,6 +25,8 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.indeterminateProgressDialog
 import org.jetbrains.anko.support.v4.toast
+import java.net.Inet4Address
+import java.net.InetAddress
 import java.util.concurrent.atomic.AtomicInteger
 
 class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickListener {
@@ -102,9 +104,10 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
         if (resultCode == 0) {
             toast("Rekisteröityminen onnistui.")
 
+            async() {
             val intent = Intent()
             val server = Server(
-                    serverAddress.text.toString(),
+                    Inet4Address.getByName(serverAddress.text.toString()).toString(),
                     serverPort.text.toString(),
                     if (serverName.text.toString() == "")
                         serverAddress.text.toString()
@@ -119,6 +122,7 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
 
             activity.setResult(Activity.RESULT_OK, intent)
             activity.finish()
+            }
         }
         // Failure (or other results later on?
         else {
@@ -130,6 +134,15 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
         try {
             val intent = activity.intentFor<RegistrationIntentService>()
             intent.putExtra("resultReceiverTag", resultReceiver)
+
+            val serverBundle = Bundle()
+            with(serverBundle) {
+                putString("address", serverAddress.text.toString())
+                putString("port", serverPort.text.toString())
+                putString("username", username.text.toString())
+            }
+            intent.putExtra("serverBundle", serverBundle)
+
             activity.startService(intent)
         } catch (e: Exception) {
             e.printStackTrace()

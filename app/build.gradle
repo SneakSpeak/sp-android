@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "io.sneakspeak.sneakspeak"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -45,7 +45,7 @@ android {
 }
 
 buildscript {
-    ext.kotlin_version = '1.0.0'
+    ext.kotlin_version = '1.0.1-2'
     ext.anko_version = '0.8.2'
 
     repositories {

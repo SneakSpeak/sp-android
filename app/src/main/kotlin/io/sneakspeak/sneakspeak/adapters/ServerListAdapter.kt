@@ -14,13 +14,14 @@ class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
     class ViewHolder(serverView: View) : RecyclerView.ViewHolder(serverView) {
         val name = serverView.serverName
         val port = serverView.serverPort
+        val address = serverView.serverAddress
+        val userName = serverView.userName
     }
 
     private var servers: List<Server>? = null
 
-    fun serServers(serverList: List<Server>) {
+    fun setServers(serverList: List<Server>) {
         servers = serverList
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,7 +30,7 @@ class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
         val inflater = LayoutInflater.from(context)
 
         // Inflate the custom layout
-        val messageView = inflater.inflate(R.layout.item_user, parent, false)
+        val messageView = inflater.inflate(R.layout.item_server, parent, false)
 
         // Return a new holder instance
         return ViewHolder(messageView)
@@ -42,6 +43,8 @@ class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
         with(viewHolder) {
             name.text = server?.name
             port.text = server?.port
+            address.text = server?.address
+            userName.text = server?.username
         }
     }
 

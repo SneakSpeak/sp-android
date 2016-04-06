@@ -52,7 +52,7 @@ class ServerListFragment(user: UserListFragment, channel: ChannelListFragment) :
 
             val server = data?.extras?.getSerializable("server") as Server
             DatabaseManager.addServer(server)
-            adapter.serServers(DatabaseManager.getServers())
+            adapter.setServers(DatabaseManager.getServers())
 
             val users = data?.extras?.getStringArrayList("users")
 

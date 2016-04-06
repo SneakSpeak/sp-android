@@ -22,19 +22,20 @@ import java.util.*
 class RegistrationIntentService : IntentService("SneakIntent") {
 
     val TAG = "RegistrationIntentService"
-    var receiver: ResultReceiver? = null
+    lateinit var receiver: ResultReceiver
+    lateinit var serverBundle: Bundle
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        receiver = intent?.getParcelableExtra("resultReceiverTag")
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        receiver = intent.getParcelableExtra("resultReceiverTag")
+        serverBundle = intent.getBundleExtra("serverBundle")
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onHandleIntent(intent: Intent) {
-        // Fetch server GCM-key
 
-        // Todo: separate different server data
-        val address = SettingsManager.getAddress()
-        val port = SettingsManager.getPort()
+        // Fetch server GCM-key
+        val address = serverBundle.get("address")
+        val port = serverBundle.get("port")
 
         val baseUrl = "http://$address:$port"
 
@@ -43,7 +44,7 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e(TAG, "Failed to request GCM key.")
-            receiver?.send(1, null)
+            receiver.send(1, null)
             return
         }
 
@@ -53,7 +54,7 @@ class RegistrationIntentService : IntentService("SneakIntent") {
                 GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
 
         val registerPayload = JSONObject()
-        registerPayload.put("username", SettingsManager.getUsername())
+        registerPayload.put("username", serverBundle.get("username"))
         registerPayload.put("token", token)
 
         val users = try {
@@ -61,7 +62,7 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e(TAG, "Failed to register to server.")
-            receiver?.send(2, null)
+            receiver.send(2, null)
             return
         }
 
@@ -69,6 +70,6 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         val bundle = Bundle()
         bundle.putStringArrayList("users", users)
         bundle.putString("token", token)
-        receiver?.send(0, bundle)
+        receiver.send(0, bundle)
     }
 }

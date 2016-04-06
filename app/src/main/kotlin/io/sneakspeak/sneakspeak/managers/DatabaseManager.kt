@@ -13,17 +13,19 @@ object DatabaseManager {
     private val lock = ReentrantLock()
     private var db: DB? = null
 
+    val SERVER_KEY = "DB_SERVER_KEY"
+
     fun addServer(server: Server) {
         openDatabase()
         lock.withLock {
-            var servers = ArrayList<Server>()
-            if (db!!.findKeys("server").size > 0) {
-                val serverJson = db!!.get("servers")
-                if (serverJson != "")
-                    servers = JsonManager.deserializeServers(serverJson)
+            val servers = if (db!!.findKeys(SERVER_KEY).size > 0) {
+                val serverJson = db!!.get(SERVER_KEY)
+                JsonManager.deserializeServers(serverJson)
+            } else {
+                ArrayList()
             }
             servers.add(server)
-            db!!.put("servers", servers)
+            db!!.put(SERVER_KEY, JsonManager.serializeServers(servers))
         }
         closeDatabase()
     }
@@ -32,8 +34,8 @@ object DatabaseManager {
         var servers = listOf<Server>()
         openDatabase()
         lock.withLock {
-            if (db!!.findKeys("server").size > 0) {
-                val serverJson = db!!.get("servers")
+            if (db!!.findKeys(SERVER_KEY).size > 0) {
+                val serverJson = db!!.get(SERVER_KEY)
                 servers = JsonManager.deserializeServers(serverJson)
             }
         }
