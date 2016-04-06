@@ -57,7 +57,6 @@ class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResu
         val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         manager.stackFromEnd = true
         messageList.layoutManager = manager
-
     }
 
     override fun onClick(button: View?) {

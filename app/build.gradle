@@ -17,6 +17,10 @@ android {
 
         multiDexEnabled = true
     }
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -36,6 +40,7 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/build.txt'
     }
 }
 
@@ -79,8 +84,6 @@ dependencies {
 
     // Misc
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
-    //compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.7.2'
-    //compile 'com.android.support:multidex:1.0.0'
+    compile 'com.snappydb:snappydb-lib:0.4.0'
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.7.1-2"
 }
-
-//apply plugin: 'com.google.gms.google-services'

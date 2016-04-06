@@ -23,7 +23,7 @@ class MainFragmentAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         val channelFrag = ChannelListFragment()
 
         // Inject userFrag and channelFrag so we can feed them received server data
-        val serverFrag = ServerFragment(userFrag, channelFrag)
+        val serverFrag = ServerListFragment(userFrag, channelFrag)
 
         fragments.add(serverFrag)
         fragments.add(userFrag)

@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.sneakspeak.sneakspeak.R
-import io.sneakspeak.sneakspeak.SneakSpeak
 import io.sneakspeak.sneakspeak.activities.ChatActivity
 import io.sneakspeak.sneakspeak.data.User
 import kotlinx.android.synthetic.main.item_user.view.*
@@ -26,9 +25,8 @@ class UserListAdapter(ctx: Context) : RecyclerView.Adapter<UserListAdapter.ViewH
 
     private var users: List<User>? = null
 
-    fun addUsers(userList: List<User>) {
+    fun setUsers(userList: List<User>) {
         users = userList
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
