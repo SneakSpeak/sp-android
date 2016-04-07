@@ -5,6 +5,9 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.Log
 import io.sneakspeak.sneakspeak.fragments.*
+import io.sneakspeak.sneakspeak.fragments.lists.ChannelListFragment
+import io.sneakspeak.sneakspeak.fragments.lists.ServerListFragment
+import io.sneakspeak.sneakspeak.fragments.lists.UserListFragment
 import java.util.*
 
 

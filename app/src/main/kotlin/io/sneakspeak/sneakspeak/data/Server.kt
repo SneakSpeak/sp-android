@@ -7,4 +7,7 @@ data class Server(val address: String,
                   val port: String,
                   val name: String,
                   val token: String,
-                  val username: String) : Serializable
+                  val username: String) : Serializable {
+
+    fun url() = "http://$address:$port"
+}

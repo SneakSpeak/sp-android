@@ -6,28 +6,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.google.android.gms.gcm.GoogleCloudMessaging
-import io.sneakspeak.sneakspeak.activities.MainActivity
 import io.sneakspeak.sneakspeak.R
-import io.sneakspeak.sneakspeak.SneakSpeak
 import io.sneakspeak.sneakspeak.containsText
 import io.sneakspeak.sneakspeak.data.Server
 import io.sneakspeak.sneakspeak.gcm.RegistrationIntentService
+import io.sneakspeak.sneakspeak.managers.DatabaseManager
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import io.sneakspeak.sneakspeak.receiver.UserResultReceiver
 import kotlinx.android.synthetic.main.fragment_register.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.async
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.support.v4.indeterminateProgressDialog
+import org.jetbrains.anko.support.v4.onUiThread
 import org.jetbrains.anko.support.v4.toast
 import java.net.Inet4Address
-import java.net.InetAddress
-import java.util.concurrent.atomic.AtomicInteger
 
 class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickListener {
 
@@ -54,9 +50,11 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
             = inflater?.inflate(R.layout.fragment_register, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+
         serverAddress.setText(SettingsManager.getAddress())
         serverPort.setText(SettingsManager.getPort())
-        username.setText(SettingsManager.getUsername())
+        serverName.setText(SettingsManager.getServerName())
+        userName.setText(SettingsManager.getUsername())
 
         registerButton.setOnClickListener(this)
     }
@@ -66,20 +64,40 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
             toast("Address can't be empty")
         } else if (!serverPort.containsText()) {
             toast("Port can't be empty")
-        } else if (!username.containsText()) {
+        } else if (!userName.containsText()) {
             toast("Username can't be empty")
         } else {
-
-            // Save
-            SettingsManager.saveLoginInfo(
-                    serverAddress.text.toString(),
-                    serverPort.text.toString(),
-                    username.text.toString())
 
             dialog = indeterminateProgressDialog("Connecting to ${serverAddress.text.toString()}")
             dialog?.setCancelable(false)
 
+            // Save latest info
+            SettingsManager.saveLoginInfo(
+                    serverAddress.text.toString(),
+                    serverPort.text.toString(),
+                    serverName.text.toString(),
+                    userName.text.toString())
+
+            // Check if the server is already added
+            val currentServers = DatabaseManager.getServers()
+
+            var ca = serverAddress.text.toString()
+            val cp = serverPort.text.toString()
+
             async() {
+                // Ip address of the server
+                ca = Inet4Address.getByName(ca).toString().split("/").last()
+
+                for ((address, port) in currentServers) {
+                    if (ca == address && cp == port) {
+                        onUiThread {
+                            toast("You are already registered to this server.")
+                            dialog?.dismiss()
+                        }
+                        return@async
+                    }
+                }
+
                 connectServer()
             }
         }
@@ -105,23 +123,32 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
             toast("Rekisteröityminen onnistui.")
 
             async() {
-            val intent = Intent()
-            val server = Server(
-                    Inet4Address.getByName(serverAddress.text.toString()).toString(),
-                    serverPort.text.toString(),
-                    if (serverName.text.toString() == "")
-                        serverAddress.text.toString()
-                    else
-                        serverName.text.toString(),
-                    token,
-                    username.text.toString())
+                val parts = Inet4Address.getByName(serverAddress.text.toString()).toString().split("/")
+                val addr = parts.last()
 
+                // Choose server name
+                val servname = if (serverName.text.toString() != "")
+                    serverName.text.toString()
+                else if (parts.first() != "")
+                    parts.first()
+                else
+                    parts.last()
 
-            intent.putExtra("server", server)
-            intent.putExtra("users", users)
+                val intent = Intent()
+                val server = Server(
+                        addr,
+                        serverPort.text.toString(),
+                        servname,
+                        token,
+                        userName.text.toString())
 
-            activity.setResult(Activity.RESULT_OK, intent)
-            activity.finish()
+                DatabaseManager.setCurrentServer(server)
+
+                intent.putExtra("server", server)
+                intent.putExtra("users", users)
+
+                activity.setResult(Activity.RESULT_OK, intent)
+                activity.finish()
             }
         }
         // Failure (or other results later on?
@@ -139,7 +166,7 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
             with(serverBundle) {
                 putString("address", serverAddress.text.toString())
                 putString("port", serverPort.text.toString())
-                putString("username", username.text.toString())
+                putString("username", userName.text.toString())
             }
             intent.putExtra("serverBundle", serverBundle)
 

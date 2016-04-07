@@ -14,6 +14,7 @@ object DatabaseManager {
     private var db: DB? = null
 
     val SERVER_KEY = "DB_SERVER_KEY"
+    val CURRENT_SERVER_KEY = "DB_CURRENT_SERVER_KEY"
 
     fun addServer(server: Server) {
         openDatabase()
@@ -42,6 +43,30 @@ object DatabaseManager {
         closeDatabase()
         return servers
     }
+
+    fun getCurrentServer(): Server? {
+        var server: Server? = null
+        openDatabase()
+        lock.withLock {
+            if (db!!.findKeys(CURRENT_SERVER_KEY).size > 0) {
+                val serverJson = db!!.get(CURRENT_SERVER_KEY)
+                server = JsonManager.deserializeCurrentServer(serverJson)
+            }
+        }
+        closeDatabase()
+        return server
+    }
+
+    fun setCurrentServer(server: Server) {
+        openDatabase()
+        lock.withLock {
+            val serverJson = JsonManager.serializeCurrentServer(server)
+            db!!.put(CURRENT_SERVER_KEY, serverJson)
+        }
+        closeDatabase()
+    }
+
+
 
     private fun openDatabase() {
         lock.withLock {

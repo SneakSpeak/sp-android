@@ -15,22 +15,15 @@ object SettingsManager {
 
     fun getPort() = prefs.getString("port", "")
 
-    fun getUsername() = prefs.getString("username", "")
+    fun getUsername() = prefs.getString("userName", "")
 
-    fun saveLoginInfo(address: String, port: String, username: String) = with(prefs.edit()) {
+    fun getServerName() = prefs.getString("serverName", "")
+
+    fun saveLoginInfo(address: String, port: String, serverName: String, userName: String) = with(prefs.edit()) {
         putString("address", address)
         putString("port", port)
-        putString("username", username)
-        apply()
-    }
-
-    fun setServerKey(key: String) = with(prefs.edit()) {
-        putString("serverKey", key)
-        apply()
-    }
-
-    fun setToken(token: String) = with(prefs.edit()) {
-        putString("token", token)
+        putString("serverName", serverName)
+        putString("userName", userName)
         apply()
     }
 }

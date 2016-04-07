@@ -1,4 +1,4 @@
-package io.sneakspeak.sneakspeak.fragments
+package io.sneakspeak.sneakspeak.fragments.lists
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.adapters.UserListAdapter
 import io.sneakspeak.sneakspeak.data.User
+import io.sneakspeak.sneakspeak.managers.DatabaseManager
 import io.sneakspeak.sneakspeak.managers.HttpManager
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import kotlinx.android.synthetic.main.fragment_user_list.*
@@ -17,6 +18,7 @@ import org.jetbrains.anko.async
 import org.jetbrains.anko.support.v4.indeterminateProgressDialog
 import org.jetbrains.anko.support.v4.onUiThread
 import org.jetbrains.anko.support.v4.progressDialog
+import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.uiThread
 import java.util.*
 
@@ -39,8 +41,14 @@ class UserListFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        val server = "http://${SettingsManager.getAddress()}:${SettingsManager.getPort()}"
-        val dialog = indeterminateProgressDialog("Getting users for server ${SettingsManager.getAddress()}...")
+        val server = DatabaseManager.getCurrentServer()
+
+        if (server == null) {
+            toast("Something is wrong.")
+            return
+        }
+
+        val dialog = indeterminateProgressDialog("Getting users for server ${server.name}...")
         dialog.show()
 
         async() {

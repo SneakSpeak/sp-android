@@ -16,9 +16,12 @@ import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.SneakSpeak
 import io.sneakspeak.sneakspeak.adapters.ChatAdapter
 import io.sneakspeak.sneakspeak.data.Message
+import io.sneakspeak.sneakspeak.managers.DatabaseManager
+import io.sneakspeak.sneakspeak.managers.HttpManager
 import io.sneakspeak.sneakspeak.managers.SettingsManager
 import io.sneakspeak.sneakspeak.receiver.MessageResultReceiver
 import kotlinx.android.synthetic.main.fragment_chat.*
+import org.jetbrains.anko.async
 import org.jetbrains.anko.support.v4.toast
 import java.text.SimpleDateFormat
 import java.util.*
@@ -62,8 +65,8 @@ class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResu
     override fun onClick(button: View?) {
         if (messageText.text.isEmpty()) return
 
-        val df = SimpleDateFormat("HH:mm:ss");
-        val time = df.format(Calendar.getInstance().time);
+        val df = SimpleDateFormat("HH:mm:ss")
+        val time = df.format(Calendar.getInstance().time)
 
         adapter.addMessage(Message(SettingsManager.getUsername(),
                 messageText.text.toString(), time))
@@ -71,19 +74,32 @@ class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResu
         messageList.scrollToPosition(adapter.itemCount - 1)
 
         // Todo: unnecessary?
-        context.sendBroadcast(Intent("com.google.android.intent.action.GTALK_HEARTBEAT"))
-        context.sendBroadcast(Intent("com.google.android.intent.action.MCS_HEARTBEAT"))
+        //context.sendBroadcast(Intent("com.google.android.intent.action.GTALK_HEARTBEAT"))
+        //context.sendBroadcast(Intent("com.google.android.intent.action.MCS_HEARTBEAT"))
 
-        // Todo: get the ID and receiver from somewhere
-        val SENDER_ID = "943308880121"
-        val data = Bundle()
-        data.putString("receiver", chatUser)
-        data.putString("message", messageText.text.toString())
-        val id = Integer.toString(msgId.incrementAndGet())
-        gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
+//        val SENDER_ID = "943308880121"
+//        val data = Bundle()
+//        data.putString("receiver", chatUser)
+//        data.putString("message", messageText.text.toString())
+//        data.putInt("time_to_live", 0)
+//        val id = Integer.toString(msgId.incrementAndGet())
+//        gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
+        //Log.d(TAG, data.toString())
+
+        val server = DatabaseManager.getCurrentServer()
+
+        if (server == null) {
+            toast("Something is wrong.")
+            return
+        }
+
+        async() {
+            HttpManager.sendMessage(server, chatUser, messageText.text.toString())
+        }
+
 
         messageText.text.clear()
-        Log.d(TAG, data.toString())
+
     }
 
     override fun onResume() {

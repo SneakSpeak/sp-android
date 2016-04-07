@@ -1,4 +1,4 @@
-package io.sneakspeak.sneakspeak.fragments
+package io.sneakspeak.sneakspeak.fragments.lists
 
 import android.app.Activity
 import android.content.Intent
@@ -13,12 +13,14 @@ import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.activities.RegisterActivity
 import io.sneakspeak.sneakspeak.adapters.ServerListAdapter
 import io.sneakspeak.sneakspeak.data.Server
+import io.sneakspeak.sneakspeak.fragments.lists.UserListFragment
+import io.sneakspeak.sneakspeak.fragments.lists.ChannelListFragment
 import io.sneakspeak.sneakspeak.managers.DatabaseManager
 import kotlinx.android.synthetic.main.fragment_server_list.*
 
 class ServerListFragment(user: UserListFragment, channel: ChannelListFragment) : Fragment(), View.OnClickListener {
 
-    val TAG = "ServerFragment"
+    val TAG = "ServerListFragment"
 
     val userFrag = user
     val channelFrag = channel
@@ -36,6 +38,9 @@ class ServerListFragment(user: UserListFragment, channel: ChannelListFragment) :
 
         serverList.adapter = adapter
         serverList.layoutManager = manager
+        val servers = DatabaseManager.getServers()
+        adapter.setServers(servers)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onClick(view: View?) {
@@ -51,6 +56,7 @@ class ServerListFragment(user: UserListFragment, channel: ChannelListFragment) :
         if (resultCode == Activity.RESULT_OK) {
 
             val server = data?.extras?.getSerializable("server") as Server
+
             DatabaseManager.addServer(server)
             adapter.setServers(DatabaseManager.getServers())
 

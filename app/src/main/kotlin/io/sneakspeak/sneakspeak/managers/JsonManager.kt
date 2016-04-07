@@ -13,28 +13,12 @@ object  JsonManager {
     val TAG = "JsonManager"
     val mapper = jacksonObjectMapper()
 
-    fun deserializeServers(str: String): ArrayList<Server> {
-        Log.d(TAG, "str:$str, pituus ${str.length}")
-
-        // For some reason some strings don't contain printable but have a non-zero
-        // length property, so this is just a quick solution for this...
-        if (str.length < 10) return ArrayList()
-
-        return mapper.readValue<ArrayList<Server>>(str)
-        // fuck you jackson
-
-//        val servers = ArrayList<Server>()
-//
-//        val jsonArr = JSONArray(str)
-//        for (i in 0..jsonArr.length()-1) {
-//            val it = jsonArr.getJSONObject(i)
-//            servers.add(Server(it.getString("address"), it.getString("port"), it.getString("name"),
-//                    it.getString("token"), it.getString("username")))
-//        }
-//
-//        return servers
-    }
+    fun deserializeServers(str: String) = mapper.readValue<ArrayList<Server>>(str)
 
     fun serializeServers(servers: ArrayList<Server>) = mapper.writeValueAsString(servers)
+
+    fun deserializeCurrentServer(str: String) = mapper.readValue<Server>(str)
+
+    fun serializeCurrentServer(server: Server) = mapper.writeValueAsString(server)
 
 }

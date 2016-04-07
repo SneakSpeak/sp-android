@@ -1,6 +1,8 @@
 package io.sneakspeak.sneakspeak.managers
 
+import android.os.Bundle
 import android.util.Log
+import io.sneakspeak.sneakspeak.data.Server
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -14,6 +16,28 @@ object HttpManager {
     val TAG = "HttpManager"
     val httpClient = OkHttpClient()
     val JSON = MediaType.parse("application/json; charset=utf-8")
+
+    fun sendMessage(server: Server, receiver: String, message: String) {
+
+        Log.d(TAG, "Sending message")
+
+        val jsonObject = JSONObject()
+        jsonObject.put("token", server.token)
+        jsonObject.put("message", message)
+
+        val url = "${server.url()}/api/user/$receiver/message"
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        val response = httpClient.newCall(request).execute()
+
+        Log.d(TAG, "Got response: $response")
+    }
+
 
 
     fun getGcmKey(server: String): String {
@@ -60,13 +84,13 @@ object HttpManager {
         return users
     }
 
-    fun getUsers(server: String): List<String> {
+    fun getUsers(server: Server): List<String> {
 
         Log.d(TAG, "Asking user list")
 
         // Todo: fix
         // ?token={token}
-        val url = "$server/api/user/list?username=${SettingsManager.getUsername()}"
+        val url = "${server.url()}/api/user/list?token=${server.token}"
 
         val request = Request.Builder()
                 .url(url)
