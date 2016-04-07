@@ -1,4 +1,4 @@
-package fi.wintus.nomnom.adapters
+package io.sneakspeak.sneakspeak.adapters
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -13,7 +13,6 @@ import java.util.*
 
 class MainFragmentAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    // val fragMan: FragmentManager = fm
     val TAG = "MainFragmentAdapter"
 
     val titles = listOf("Servers", "Users", "Channels")

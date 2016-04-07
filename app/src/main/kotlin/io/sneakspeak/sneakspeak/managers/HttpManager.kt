@@ -2,6 +2,7 @@ package io.sneakspeak.sneakspeak.managers
 
 import android.os.Bundle
 import android.util.Log
+import io.sneakspeak.sneakspeak.data.Channel
 import io.sneakspeak.sneakspeak.data.Server
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -86,7 +87,7 @@ object HttpManager {
 
     fun getUsers(server: Server): List<String> {
 
-        Log.d(TAG, "Asking user list")
+        Log.d(TAG, "Requesting user list")
 
         // Todo: fix
         // ?token={token}
@@ -114,4 +115,30 @@ object HttpManager {
 
         return users
     }
+
+    fun getChannels(server: Server): List<Channel> {
+
+        Log.d(TAG, "Requesting channel list")
+
+        val url = "${server.url()}/api/user/channels?token=${server.token}"
+
+        val request = Request.Builder()
+                .url(url)
+                .get()
+                .build()
+
+        val response = httpClient.newCall(request).execute()
+        Log.d(TAG, "Got response: $response")
+
+        val channels = try {
+            JsonManager.deserializeChannels(response.body().string())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return emptyList()
+        }
+        response.body().close()
+        return channels
+    }
+
+
 }

@@ -40,7 +40,7 @@ class UserListFragment : Fragment(), View.OnClickListener {
         userList.layoutManager = manager
     }
 
-    override fun onClick(view: View) {
+    override fun onClick(view: View?) {
         val server = DatabaseManager.getCurrentServer()
 
         if (server == null) {

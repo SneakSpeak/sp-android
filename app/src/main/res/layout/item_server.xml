@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dip">
+        android:padding="8dip">
 
         <TextView
             android:id="@+id/serverName"
@@ -24,7 +24,6 @@
             android:textSize="14sp"/>
 
         <TextView
-            android:layout_toEndOf="@id/serverName"
             android:layout_alignParentRight="true"
             android:id="@+id/serverAddress"
             android:layout_width="wrap_content"

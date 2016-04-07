@@ -38,6 +38,7 @@ class ServerListFragment(user: UserListFragment, channel: ChannelListFragment) :
 
         serverList.adapter = adapter
         serverList.layoutManager = manager
+
         val servers = DatabaseManager.getServers()
         adapter.setServers(servers)
         adapter.notifyDataSetChanged()
