@@ -123,20 +123,21 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
             toast("Rekisteröityminen onnistui.")
 
             async() {
-                val parts = Inet4Address.getByName(serverAddress.text.toString()).toString().split("/")
-                val addr = parts.last()
+//                val parts = Inet4Address.getByName(serverAddress.text.toString()).toString().split("/")
+//                val addr = parts.last()
 
                 // Choose server name
                 val servname = if (serverName.text.toString() != "")
                     serverName.text.toString()
-                else if (parts.first() != "")
-                    parts.first()
-                else
-                    parts.last()
+                else serverAddress.text.toString()
+//                else if (parts.first() != "")
+//                    parts.first()
+//                else
+//                    parts.last()
 
                 val intent = Intent()
                 val server = Server(
-                        addr,
+                        serverAddress.text.toString(),
                         serverPort.text.toString(),
                         servname,
                         token,

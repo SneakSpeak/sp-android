@@ -42,16 +42,23 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         val gcmKey = try {
             HttpManager.getGcmKey(baseUrl)
         } catch (e: Exception) {
-            e.printStackTrace()
             Log.e(TAG, "Failed to request GCM key.")
+            e.printStackTrace()
             receiver.send(1, null)
             return
         }
 
         // Create token and send it to server
         val iID = InstanceID.getInstance(this)
-        val token = iID.getToken(gcmKey,
-                GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
+        val token = try {
+            iID.getToken(gcmKey.replace("\"", ""),
+                    GoogleCloudMessaging.INSTANCE_ID_SCOPE)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to create token")
+            e.printStackTrace()
+            receiver.send(1, null)
+            return
+        }
 
         val registerPayload = JSONObject()
         registerPayload.put("username", serverBundle.get("username"))
@@ -60,8 +67,8 @@ class RegistrationIntentService : IntentService("SneakIntent") {
         val users = try {
             HttpManager.register(baseUrl, registerPayload)
         } catch (e: Exception) {
-            e.printStackTrace()
             Log.e(TAG, "Failed to register to server.")
+            e.printStackTrace()
             receiver.send(2, null)
             return
         }
