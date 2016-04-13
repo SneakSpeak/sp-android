@@ -1,21 +1,23 @@
 package io.sneakspeak.sneakspeak.fragments.lists
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
+
 import android.support.v7.widget.LinearLayoutManager
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.adapters.ChannelListAdapter
-import io.sneakspeak.sneakspeak.data.Channel
-import io.sneakspeak.sneakspeak.data.User
 import io.sneakspeak.sneakspeak.managers.DatabaseManager
 import io.sneakspeak.sneakspeak.managers.HttpManager
 import kotlinx.android.synthetic.main.fragment_channel_list.*
+import org.jetbrains.anko.AlertDialogBuilder
 import org.jetbrains.anko.async
 import org.jetbrains.anko.support.v4.indeterminateProgressDialog
-import org.jetbrains.anko.support.v4.onUiThread
 import org.jetbrains.anko.support.v4.toast
 import org.jetbrains.anko.uiThread
 
@@ -31,6 +33,8 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         updateButton.setOnClickListener(this)
+        createButton.setOnClickListener(this)
+
         adapter = ChannelListAdapter(activity)
         val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
@@ -42,8 +46,8 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View) {
         if (view == updateButton)
             updateChannels()
-//        else if (view == addButton)
-//            addChannel()
+        else if (view == createButton)
+            addChannel()
     }
 
     private fun updateChannels() {
@@ -71,6 +75,46 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
     }
 
     private fun addChannel() {
+        val alertDialog = AlertDialogBuilder(activity)
+        alertDialog.title("Create or join a channel")
 
+        val input = EditText(activity)
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        alertDialog.customView(input)
+
+        alertDialog.positiveButton {
+
+            val channelName = input.text.toString()
+            if (channelName.contains(" ")) {
+                toast("Channel name cannot contain whitespace")
+                return@positiveButton
+            }
+
+            val server = DatabaseManager.getCurrentServer()
+
+            if (server == null) {
+                toast("Something is wrong.")
+                return@positiveButton
+            }
+
+            val dialog = indeterminateProgressDialog("Joining channel $channelName...")
+            dialog.show()
+            async() {
+                val channels = HttpManager.joinOrCreateChannel(server, channelName)
+                adapter.setChannels(channels)
+
+                uiThread {
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+            }
+
+
+        }
+
+        alertDialog.negativeButton("Cancel")
+
+        alertDialog.show()
     }
 }

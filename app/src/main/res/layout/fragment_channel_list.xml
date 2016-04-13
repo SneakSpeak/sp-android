@@ -8,14 +8,23 @@
         android:id="@+id/updateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update"
+        android:text="Update personal channels"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create or join a channel"
+        android:layout_above="@+id/updateButton"
+        android:layout_centerHorizontal="true"/>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/channelList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/updateButton"/>
+        android:layout_above="@+id/createButton"/>
 
 </RelativeLayout>

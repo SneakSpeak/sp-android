@@ -140,5 +140,27 @@ object HttpManager {
         return channels
     }
 
+    fun joinOrCreateChannel(server: Server, channelName: String): List<Channel> {
+        Log.d(TAG, "Joining channel $channelName")
+
+        val url = "${server.url()}/api/channel/joinOrCreate"
+
+        val jsonObject = JSONObject()
+        jsonObject.put("token", server.token)
+        jsonObject.put("name", channelName)
+
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
+        val request = Request.Builder()
+                .url(url)
+                .post(body)
+                .build()
+
+        val response = httpClient.newCall(request).execute()
+        Log.d(TAG, "Got response: $response")
+
+        return listOf()
+    }
+
 
 }
