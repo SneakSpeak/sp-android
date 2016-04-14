@@ -120,7 +120,8 @@ object HttpManager {
 
         Log.d(TAG, "Requesting channel list")
 
-        val url = "${server.url()}/api/user/channels?token=${server.token}"
+        //val url = "${server.url()}/api/user/channels?token=${server.token}"
+        val url = "${server.url()}/api/channel"
 
         val request = Request.Builder()
                 .url(url)
