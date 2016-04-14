@@ -20,7 +20,7 @@ object HttpManager {
 
     fun sendMessage(server: Server, receiver: String, message: String) {
 
-        Log.d(TAG, "Sending message")
+        Log.d(TAG, "Sending message $message to user $receiver")
 
         val jsonObject = JSONObject()
         jsonObject.put("token", server.token)
@@ -140,7 +140,7 @@ object HttpManager {
         return channels
     }
 
-    fun joinOrCreateChannel(server: Server, channelName: String): List<Channel> {
+    fun joinOrCreateChannel(server: Server, channelName: String): Channel? {
         Log.d(TAG, "Joining channel $channelName")
 
         val url = "${server.url()}/api/channel/joinOrCreate"
@@ -159,7 +159,34 @@ object HttpManager {
         val response = httpClient.newCall(request).execute()
         Log.d(TAG, "Got response: $response")
 
-        return listOf()
+        val channels = try {
+            JsonManager.deserializeOneChannel(response.body().string())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+        response.body().close()
+        return channels
+    }
+
+    fun sendChannelMessage(server: Server, channel: Channel, message: String) {
+        Log.d(TAG, "Sending message $message to channel $channel")
+
+        val jsonObject = JSONObject()
+        jsonObject.put("token", server.token)
+        jsonObject.put("message", message)
+
+        val url = "${server.url()}/api/channel/${channel.id}/message"
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
+        val request = Request.Builder()
+                .url(url)
+                .post(body)
+                .build()
+
+        val response = httpClient.newCall(request).execute()
+
+        Log.d(TAG, "Got response: $response")
     }
 
 

@@ -15,6 +15,7 @@ import io.sneakspeak.sneakspeak.activities.MainActivity
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.SneakSpeak
 import io.sneakspeak.sneakspeak.adapters.ChatAdapter
+import io.sneakspeak.sneakspeak.data.Channel
 import io.sneakspeak.sneakspeak.data.Message
 import io.sneakspeak.sneakspeak.managers.DatabaseManager
 import io.sneakspeak.sneakspeak.managers.HttpManager
@@ -28,17 +29,28 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResultReceiver.Receiver {
+class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageResultReceiver.Receiver {
+
+    var chatUser: String? = null
+    var chatChannel: Channel? = null
+
+    init {
+        chatUser = user
+    }
+
+    constructor(channel: Channel) : this(null) {
+        chatChannel = channel
+    }
 
     val TAG = "ChatFragment"
-    val chatUser = user
+
 
     companion object {
         var messageReceiver = MessageResultReceiver(Handler())
     }
 
-    val msgId = AtomicInteger()
-    val gcm = GoogleCloudMessaging.getInstance(SneakSpeak.context);
+//    val msgId = AtomicInteger()
+//    val gcm = GoogleCloudMessaging.getInstance(SneakSpeak.context);
     lateinit var adapter: ChatAdapter
 
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
@@ -94,7 +106,10 @@ class ChatFragment(user: String) : Fragment(), View.OnClickListener, MessageResu
         }
 
         async() {
-            HttpManager.sendMessage(server, chatUser, messageText.text.toString())
+            if (chatUser != null) {
+                HttpManager.sendMessage(server, chatUser ?: return@async, messageText.text.toString())
+            }
+            HttpManager.sendChannelMessage(server, chatChannel ?: return@async, messageText.text.toString())
         }
 
 

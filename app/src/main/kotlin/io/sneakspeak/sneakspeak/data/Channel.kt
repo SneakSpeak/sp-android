@@ -4,4 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class Channel(val name: String, val public: Boolean, val id: Int): Serializable
+data class Channel(val participants: List<String>,
+                   val name: String,
+                   val public: Boolean,
+                   val id: Int): Serializable

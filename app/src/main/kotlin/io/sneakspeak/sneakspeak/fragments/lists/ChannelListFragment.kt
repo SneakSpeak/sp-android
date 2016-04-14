@@ -100,8 +100,13 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
             val dialog = indeterminateProgressDialog("Joining channel $channelName...")
             dialog.show()
             async() {
-                val channels = HttpManager.joinOrCreateChannel(server, channelName)
-                adapter.setChannels(channels)
+                val channel = HttpManager.joinOrCreateChannel(server, channelName)
+                if (channel == null) {
+                    uiThread { dialog.dismiss() }
+                    return@async
+                }
+
+                adapter.addChannel(channel)
 
                 uiThread {
                     adapter.notifyDataSetChanged()

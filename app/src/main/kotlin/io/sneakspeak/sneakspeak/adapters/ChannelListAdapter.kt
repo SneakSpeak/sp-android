@@ -14,6 +14,7 @@ import io.sneakspeak.sneakspeak.data.Channel
 import io.sneakspeak.sneakspeak.data.User
 import kotlinx.android.synthetic.main.item_channel.view.*
 import org.jetbrains.anko.toast
+import java.util.*
 
 
 class ChannelListAdapter(ctx: Context) : RecyclerView.Adapter<ChannelListAdapter.ViewHolder>(),
@@ -26,10 +27,10 @@ class ChannelListAdapter(ctx: Context) : RecyclerView.Adapter<ChannelListAdapter
         val channelName = channelView.channelName
     }
 
-    private var channels: List<Channel>? = null
+    private var channels: ArrayList<Channel>? = null
 
     fun setChannels(channelList: List<Channel>) {
-        channels = channelList
+        channels = ArrayList(channelList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelListAdapter.ViewHolder {
@@ -57,15 +58,23 @@ class ChannelListAdapter(ctx: Context) : RecyclerView.Adapter<ChannelListAdapter
     override fun getItemCount() = channels?.size ?: 0
 
     override fun onClick(view: View?) {
-        val name = view?.channelName ?: return
+        val name = view?.channelName?.text?.toString() ?: return
 
-        Log.d(TAG, name.text.toString())
+        val channel = channels?.find { it.name == name } ?: return
 
-        context.toast("Channel selected. Todo: ChatActivity w/Channels")
-//        val intent = Intent(context, ChatActivity::class.java)
-//        val bundle = Bundle()
-//        bundle.putString("name", name.text.toString())
-//        intent.putExtras(bundle)
-//        context.startActivity(intent)
+        Log.d(TAG, "Channel selected: $channel")
+
+        val intent = Intent(context, ChatActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable("channel", channel)
+        intent.putExtras(bundle)
+        context.startActivity(intent)
+    }
+
+    fun addChannel(channel: Channel) {
+        if (channels == null)
+            channels = ArrayList<Channel>()
+
+        channels?.add(channel)
     }
 }
