@@ -17,14 +17,7 @@
             android:textSize="14sp"/>
 
         <TextView
-            android:layout_below="@id/serverName"
-            android:id="@+id/serverPort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:id="@+id/serverAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,6 +26,13 @@
         <TextView
             android:layout_below="@id/serverAddress"
             android:layout_alignParentEnd="true"
+            android:id="@+id/serverPort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_below="@id/serverName"
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

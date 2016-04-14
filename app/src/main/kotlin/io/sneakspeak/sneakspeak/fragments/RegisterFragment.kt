@@ -64,6 +64,8 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
             toast("Address can't be empty")
         } else if (!serverPort.containsText()) {
             toast("Port can't be empty")
+        } else if (!serverName.containsText()) {
+            toast("Server name can't be empty")
         } else if (!userName.containsText()) {
             toast("Username can't be empty")
         } else {
@@ -83,15 +85,20 @@ class RegisterFragment : Fragment(), UserResultReceiver.Receiver, View.OnClickLi
 
             var ca = serverAddress.text.toString()
             val cp = serverPort.text.toString()
+            val cn = serverName.text.toString()
 
             async() {
-                // Ip address of the server
-                ca = Inet4Address.getByName(ca).toString().split("/").last()
 
-                for ((address, port) in currentServers) {
+                for ((address, port, name) in currentServers) {
                     if (ca == address && cp == port) {
                         onUiThread {
                             toast("You are already registered to this server.")
+                            dialog?.dismiss()
+                        }
+                        return@async
+                    } else if (name == cn) {
+                        onUiThread {
+                            toast("You already have a server named $name")
                             dialog?.dismiss()
                         }
                         return@async
