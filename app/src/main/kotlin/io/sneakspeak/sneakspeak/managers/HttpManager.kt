@@ -1,6 +1,5 @@
 package io.sneakspeak.sneakspeak.managers
 
-import android.os.Bundle
 import android.util.Log
 import io.sneakspeak.sneakspeak.data.Channel
 import io.sneakspeak.sneakspeak.data.Server

@@ -24,6 +24,7 @@ import io.sneakspeak.sneakspeak.receiver.MessageResultReceiver
 import kotlinx.android.synthetic.main.fragment_chat.*
 import org.jetbrains.anko.async
 import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.uiThread
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -108,13 +109,13 @@ class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageRes
         async() {
             if (chatUser != null) {
                 HttpManager.sendMessage(server, chatUser ?: return@async, messageText.text.toString())
+            } else {
+                HttpManager.sendChannelMessage(server, chatChannel ?: return@async, messageText.text.toString())
             }
-            HttpManager.sendChannelMessage(server, chatChannel ?: return@async, messageText.text.toString())
+            uiThread {
+                messageText.text.clear()
+            }
         }
-
-
-        messageText.text.clear()
-
     }
 
     override fun onResume() {
