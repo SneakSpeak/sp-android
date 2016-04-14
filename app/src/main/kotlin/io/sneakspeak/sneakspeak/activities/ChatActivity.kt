@@ -26,7 +26,7 @@ class ChatActivity : AppCompatActivity() {
             ChatFragment(user)
         } else {
             toolbar.title = "Group chat"
-            toolbar.subtitle = channel.participants.toString()
+            toolbar.subtitle = "<participants>"//channel.participants.toString()
             ChatFragment(channel)
         }
 

@@ -63,9 +63,10 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
         dialog.show()
 
         async() {
-            val channels = HttpManager.getChannels(server)
+            val publicChannels = HttpManager.getPublicChannels(server)
+            val joinedChannels = HttpManager.getJoinedChannels(server)
 
-            adapter.setChannels(channels)
+            adapter.setChannels(publicChannels, joinedChannels)
 
             uiThread {
                 adapter.notifyDataSetChanged()
@@ -106,7 +107,7 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
                     return@async
                 }
 
-                adapter.addChannel(channel)
+                adapter.addJoinedChannel(channel)
 
                 uiThread {
                     adapter.notifyDataSetChanged()
