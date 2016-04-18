@@ -36,6 +36,7 @@ object HttpManager {
         val response = httpClient.newCall(request).execute()
 
         Log.d(TAG, "Got response: $response")
+        response.body().close()
     }
 
 
@@ -188,6 +189,7 @@ object HttpManager {
         val response = httpClient.newCall(request).execute()
 
         Log.d(TAG, "Got response: $response")
+        response.body().close()
     }
 
     fun getJoinedChannels(server: Server): List<Channel> {

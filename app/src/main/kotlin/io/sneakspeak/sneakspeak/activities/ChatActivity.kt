@@ -29,7 +29,7 @@ class ChatActivity : AppCompatActivity() {
             toolbar.subtitle = user
             ChatFragment(user)
         } else {
-            toolbar.title = "Group chat"
+            toolbar.title = "#${channel.name}"
             val dialog = indeterminateProgressDialog("Loading participant list")
             async() {
                 val participants = HttpManager.getParticipants(channel)
