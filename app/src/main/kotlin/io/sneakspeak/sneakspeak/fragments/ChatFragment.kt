@@ -3,6 +3,7 @@ package io.sneakspeak.sneakspeak.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.support.annotation.UiThread
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.text.format.Time
@@ -32,11 +33,9 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageResultReceiver.Receiver {
 
-    var chatUser: String? = null
-    var chatChannel: Channel? = null
-
     init {
         chatUser = user
+        chatChannel = null
     }
 
     constructor(channel: Channel) : this(null) {
@@ -47,7 +46,9 @@ class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageRes
 
 
     companion object {
-        var messageReceiver = MessageResultReceiver(Handler())
+        var messageReceiver: MessageResultReceiver? = null
+        var chatUser: String? = null
+        var chatChannel: Channel? = null
     }
 
     lateinit var adapter: ChatAdapter
@@ -71,6 +72,8 @@ class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageRes
         val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         manager.stackFromEnd = true
         messageList.layoutManager = manager
+
+        messageReceiver = MessageResultReceiver(Handler())
     }
 
     override fun onClick(button: View?) {
@@ -105,11 +108,11 @@ class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageRes
 
     override fun onResume() {
         super.onResume()
-        messageReceiver.receiver = this
+        messageReceiver?.receiver = this
     }
 
     override fun onPause() {
         super.onPause()
-        messageReceiver.receiver = null
+        messageReceiver?.receiver = null
     }
 }

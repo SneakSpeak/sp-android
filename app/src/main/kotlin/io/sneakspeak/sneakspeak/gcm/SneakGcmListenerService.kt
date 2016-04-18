@@ -35,26 +35,37 @@ class SneakGcmListenerService : GcmListenerService() {
         // super.onMessageReceived(from, data)
         Log.d(TAG, data?.toString())
 
-        // Play notification sound
-        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val ringtone = RingtoneManager.getRingtone(applicationContext, notification);
-        ringtone.play();
-
         Log.d(TAG, "Message received, do something about it.")
 
         val df = SimpleDateFormat("HH:mm:ss");
         val time = df.format(Calendar.getInstance().time);
 
-        val bundle = Bundle()
-        // val msg = data?.getBundle("notification")
+        val sender = data?.getString("title")
+        val message = data?.getString("message")
 
-        // Todo: check the bundle for nulls
-        bundle.putString("sender", data?.getString("title"))
-        bundle.putString("message", data?.getString("message"))
+        if (sender == null || message == null) return
+
+        val bundle = Bundle()
+        bundle.putString("sender", sender)
+        bundle.putString("message", message)
         bundle.putString("time", time)
 
-        ChatFragment.messageReceiver.send(0, bundle)
+        val channelName = data?.getString("channelName")
 
+        if (ChatFragment.messageReceiver != null && ChatFragment.messageReceiver?.receiver != null
+            && ((ChatFragment.chatChannel != null && ChatFragment.chatChannel?.name == channelName)
+                || (ChatFragment.chatUser != null && ChatFragment.chatUser == sender))) {
+            // Play notification sound
+            val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val ringtone = RingtoneManager.getRingtone(applicationContext, notification);
+            ringtone.play();
+
+            ChatFragment.messageReceiver?.send(0, bundle)
+
+        }
+        else {
+            sendNotification(sender, message)
+        }
     }
 
     fun sendNotification(title: String, message: String) {
