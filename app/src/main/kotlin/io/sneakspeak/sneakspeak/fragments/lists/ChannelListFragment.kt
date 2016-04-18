@@ -1,6 +1,5 @@
 package io.sneakspeak.sneakspeak.fragments.lists
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
 
@@ -9,7 +8,9 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.adapters.ChannelListAdapter
 import io.sneakspeak.sneakspeak.managers.DatabaseManager
@@ -81,7 +82,18 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
 
         val input = EditText(activity)
         input.inputType = InputType.TYPE_CLASS_TEXT
-        alertDialog.customView(input)
+
+        val checkBox = CheckBox(activity)
+        checkBox.isChecked = true
+        checkBox.text = "Public channel"
+
+        val layout = LinearLayout(activity)
+        layout.orientation = LinearLayout.VERTICAL
+
+        layout.addView(input)
+        layout.addView(checkBox)
+
+        alertDialog.customView(layout)
 
         alertDialog.positiveButton {
 
@@ -101,7 +113,7 @@ class ChannelListFragment : Fragment(), View.OnClickListener {
             val dialog = indeterminateProgressDialog("Joining channel $channelName...")
             dialog.show()
             async() {
-                val channel = HttpManager.joinOrCreateChannel(server, channelName)
+                val channel = HttpManager.joinOrCreateChannel(server, channelName, checkBox.isChecked)
                 if (channel == null) {
                     uiThread { dialog.dismiss() }
                     return@async

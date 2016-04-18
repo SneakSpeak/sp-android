@@ -4,17 +4,23 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.activities.ChatActivity
 import io.sneakspeak.sneakspeak.data.Channel
 import io.sneakspeak.sneakspeak.data.User
+import io.sneakspeak.sneakspeak.managers.DatabaseManager
+import io.sneakspeak.sneakspeak.managers.HttpManager
 import kotlinx.android.synthetic.main.item_channel.view.*
 import kotlinx.android.synthetic.main.item_header.view.*
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.*
+import org.jetbrains.anko.support.v4.indeterminateProgressDialog
+import org.jetbrains.anko.support.v4.toast
 import java.util.*
 
 
@@ -102,6 +108,53 @@ class ChannelListAdapter(ctx: Context) : RecyclerView.Adapter<RecyclerView.ViewH
                 ?: return
 
         Log.d(TAG, "Channel selected: $channel")
+
+        if (channel in publicChannels) {
+
+            val alertDialog = AlertDialogBuilder(context)
+            alertDialog.title("Joining channel")
+            alertDialog.message("Do you want to join channel ${channel.name}")
+
+            alertDialog.positiveButton {
+
+                val server = DatabaseManager.getCurrentServer()
+
+                if (server == null) {
+                    context.toast("Something is wrong.")
+                    return@positiveButton
+                }
+
+                val dialog = context.indeterminateProgressDialog("Joining channel ${channel.name}...")
+                dialog.show()
+                async() {
+                    val joinedChannel = HttpManager.joinOrCreateChannel(server, channel.name, true)
+                    if (joinedChannel == null) {
+                        uiThread { dialog.dismiss() }
+                        return@async
+                    }
+
+                    addJoinedChannel(joinedChannel)
+
+                    uiThread {
+                        notifyDataSetChanged()
+                        dialog.dismiss()
+                    }
+
+                    val intent = Intent(context, ChatActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putSerializable("channel", channel)
+                    intent.putExtras(bundle)
+                    context.startActivity(intent)
+                }
+
+
+            }
+
+            alertDialog.negativeButton("Cancel")
+
+            alertDialog.show()
+            return
+        }
 
         val intent = Intent(context, ChatActivity::class.java)
         val bundle = Bundle()

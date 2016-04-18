@@ -140,7 +140,7 @@ object HttpManager {
         return channels
     }
 
-    fun joinOrCreateChannel(server: Server, channelName: String): Channel? {
+    fun joinOrCreateChannel(server: Server, channelName: String, public: Boolean): Channel? {
         Log.d(TAG, "Joining channel $channelName")
 
         val url = "${server.url()}/api/channel/joinOrCreate"
@@ -148,7 +148,7 @@ object HttpManager {
         val jsonObject = JSONObject()
         jsonObject.put("token", server.token)
         jsonObject.put("name", channelName)
-        // todo: public true tai false
+        jsonObject.put("public", public)
 
         val body = RequestBody.create(JSON, jsonObject.toString())
 
@@ -214,6 +214,32 @@ object HttpManager {
             response.body().close()
             return channels
 
+    }
+
+    fun getParticipants(channel: Channel): List<String> {
+        Log.d(TAG, "Requesting participant list for channel $channel")
+
+        val server = DatabaseManager.getCurrentServer() ?: return listOf()
+
+        val url = "${server.url()}/api/channel/${channel.id}/participants"
+        // val url = "${server.url()}/api/channel"
+
+        val request = Request.Builder()
+                .url(url)
+                .get()
+                .build()
+
+        val response = httpClient.newCall(request).execute()
+        Log.d(TAG, "Got response: $response")
+
+        val participants = try {
+            JsonManager.deserializeUsers(response.body().string())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return emptyList()
+        }
+        response.body().close()
+        return participants
     }
 
 

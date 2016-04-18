@@ -50,8 +50,6 @@ class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageRes
         var messageReceiver = MessageResultReceiver(Handler())
     }
 
-//    val msgId = AtomicInteger()
-//    val gcm = GoogleCloudMessaging.getInstance(SneakSpeak.context);
     lateinit var adapter: ChatAdapter
 
     override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
@@ -85,19 +83,6 @@ class ChatFragment(user: String?) : Fragment(), View.OnClickListener, MessageRes
                 messageText.text.toString(), time))
 
         messageList.scrollToPosition(adapter.itemCount - 1)
-
-        // Todo: unnecessary?
-        //context.sendBroadcast(Intent("com.google.android.intent.action.GTALK_HEARTBEAT"))
-        //context.sendBroadcast(Intent("com.google.android.intent.action.MCS_HEARTBEAT"))
-
-//        val SENDER_ID = "943308880121"
-//        val data = Bundle()
-//        data.putString("receiver", chatUser)
-//        data.putString("message", messageText.text.toString())
-//        data.putInt("time_to_live", 0)
-//        val id = Integer.toString(msgId.incrementAndGet())
-//        gcm.send("$SENDER_ID@gcm.googleapis.com", id, data)
-        //Log.d(TAG, data.toString())
 
         val server = DatabaseManager.getCurrentServer()
 

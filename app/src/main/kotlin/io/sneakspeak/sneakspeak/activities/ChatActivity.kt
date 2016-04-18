@@ -5,8 +5,12 @@ import android.support.v7.app.AppCompatActivity
 import io.sneakspeak.sneakspeak.R
 import io.sneakspeak.sneakspeak.data.Channel
 import io.sneakspeak.sneakspeak.fragments.ChatFragment
+import io.sneakspeak.sneakspeak.managers.HttpManager
 import kotlinx.android.synthetic.main.activity_chat.*
+import org.jetbrains.anko.async
+import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.support.v4.withArguments
+import org.jetbrains.anko.uiThread
 
 
 class ChatActivity : AppCompatActivity() {
@@ -26,7 +30,17 @@ class ChatActivity : AppCompatActivity() {
             ChatFragment(user)
         } else {
             toolbar.title = "Group chat"
-            toolbar.subtitle = "<participants>"//channel.participants.toString()
+            val dialog = indeterminateProgressDialog("Loading participant list")
+            async() {
+                val participants = HttpManager.getParticipants(channel)
+
+                uiThread {
+                    toolbar.subtitle = participants.toString() //channel.participants.toString()
+                    dialog.dismiss()
+                }
+
+            }
+
             ChatFragment(channel)
         }
 

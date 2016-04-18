@@ -26,4 +26,6 @@ object  JsonManager {
 
     fun deserializeOneChannel(string: String) = mapper.readValue<Channel>(string)
 
+    fun deserializeUsers(string: String) = mapper.readValue<List<String>>(string)
+
 }
